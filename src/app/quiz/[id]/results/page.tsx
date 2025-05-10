@@ -18,6 +18,16 @@ export default function QuizResults() {
   const total = Number(searchParams.get('total'));
   const percentage = Math.round((score / total) * 100);
 
+  // Determine the result category and color
+  const getResultCategory = () => {
+    if (percentage >= 90) return { text: 'Outstanding!', color: 'from-green-500 to-green-600', icon: '🌱' };
+    if (percentage >= 70) return { text: 'Great Job!', color: 'from-green-400 to-green-500', icon: '🌿' };
+    if (percentage >= 50) return { text: 'Good Effort!', color: 'from-yellow-400 to-yellow-500', icon: '🌻' };
+    return { text: 'Keep Growing!', color: 'from-orange-400 to-orange-500', icon: '🌱' };
+  };
+
+  const resultCategory = getResultCategory();
+
   useEffect(() => {
     const saveResult = async () => {
       if (!isAuthenticated || !token) return;
@@ -66,51 +76,81 @@ export default function QuizResults() {
   }, [isAuthenticated, token, score, total, percentage]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <div className="bg-white shadow sm:rounded-lg overflow-hidden">
-          <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">
-              Quiz Results
-            </h3>
+        <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-green-100">
+          <div className={`bg-gradient-to-r ${resultCategory.color} px-6 py-8 text-center`}>
+            <div className="text-6xl mb-4">{resultCategory.icon}</div>
+            <h2 className="text-3xl font-bold text-white mb-2">{resultCategory.text}</h2>
+            <p className="text-white text-opacity-90">You've completed the quiz!</p>
+          </div>
 
+          <div className="p-8">
+            {/* Score Display */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-blue-100 mb-4">
-                <span className="text-4xl font-bold text-blue-600">
+              <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-green-50 to-white border-4 border-green-100 mb-4">
+                <span className="text-4xl font-bold text-green-600">
                   {percentage}%
                 </span>
               </div>
               <p className="text-lg text-gray-600">
                 You got {score} out of {total} questions correct
               </p>
-              {error && (
-                <p className="mt-2 text-sm text-red-600">
-                  {error}
-                </p>
-              )}
-              {message && (
-                <p className="mt-2 text-sm text-blue-600">
-                  {message}
-                </p>
-              )}
-              {isSubmitting && (
-                <p className="mt-2 text-sm text-gray-600">
-                  Saving your result...
-                </p>
-              )}
             </div>
 
+            {/* Messages */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-100">
+                <div className="flex items-start">
+                  <svg className="w-5 h-5 text-red-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p className="text-red-800">{error}</p>
+                </div>
+              </div>
+            )}
+
+            {message && (
+              <div className="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                <div className="flex items-start">
+                  <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-blue-800">{message}</p>
+                </div>
+              </div>
+            )}
+
+            {isSubmitting && (
+              <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin h-5 w-5 text-gray-600 mr-2" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  <p className="text-gray-600">Saving your result...</p>
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
             <div className="space-y-4">
               <button
                 onClick={() => router.push('/')}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                className="w-full bg-green-600 text-white py-3 px-4 rounded-xl hover:bg-green-700 transition-colors flex items-center justify-center"
               >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
                 Back to Home
               </button>
               <button
                 onClick={() => router.back()}
-                className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors"
+                className="w-full bg-white text-gray-700 py-3 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors flex items-center justify-center"
               >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
                 Try Again
               </button>
             </div>

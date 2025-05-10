@@ -1,161 +1,85 @@
 'use client';
 
 import { useState } from 'react';
-import { useAppDispatch } from '@/app/store/hooks';
-import { signIn } from '@/app/store/authSlice';
-import { useRouter } from 'next/navigation';
 
 interface AuthFormProps {
   mode: 'signin' | 'signup';
-  onSuccess?: () => void;
-  className?: string;
+  onSubmit: (email: string) => Promise<void>;
+  submitButtonText?: string;
+  error?: string | null;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
-
-export default function AuthForm({ mode, onSuccess, className = '' }: AuthFormProps) {
-  const dispatch = useAppDispatch();
-  const router = useRouter();
+export default function AuthForm({ mode, onSubmit, submitButtonText, error }: AuthFormProps) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+    if (!email) return;
 
+    setIsSubmitting(true);
     try {
-      if (mode === 'signin') {
-        // Step 1: Get token
-        const tokenResponse = await fetch(`${API_BASE_URL}/token`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
-        });
-
-        if (!tokenResponse.ok) {
-          throw new Error('Invalid email');
-        }
-
-        const { access_token } = await tokenResponse.json();
-
-        // Step 2: Get user details
-        const userResponse = await fetch(`${API_BASE_URL}/users/me`, {
-          headers: {
-            'Authorization': `Bearer ${access_token}`,
-          },
-        });
-
-        if (!userResponse.ok) {
-          throw new Error('Failed to fetch user details');
-        }
-
-        const userData = await userResponse.json();
-
-        // Step 3: Update Redux store
-        dispatch(signIn({
-          user: userData,
-          token: access_token,
-        }));
-
-        // Call onSuccess callback if provided
-        onSuccess?.();
-
-        // Redirect to home page
-        router.push('/');
-      } else {
-        // Handle signup
-        const response = await fetch(`${API_BASE_URL}/users`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to create account');
-        }
-
-        // After successful signup, automatically sign in
-        const { access_token } = await response.json();
-        const userResponse = await fetch(`${API_BASE_URL}/users/me`, {
-          headers: {
-            'Authorization': `Bearer ${access_token}`,
-          },
-        });
-
-        if (!userResponse.ok) {
-          throw new Error('Failed to fetch user details');
-        }
-
-        const userData = await userResponse.json();
-        dispatch(signIn({
-          user: userData,
-          token: access_token,
-        }));
-
-        // Call onSuccess callback if provided
-        onSuccess?.();
-
-        // Redirect to home page
-        router.push('/');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      await onSubmit(email);
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email
+          Email address
         </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          placeholder="your@email.com"
-          disabled={isLoading}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          placeholder="••••••••"
-        />
+        <div className="mt-1">
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+            placeholder="you@example.com"
+          />
+        </div>
       </div>
 
       {error && (
-        <div className="text-red-500 text-sm">{error}</div>
+        <div className="rounded-lg bg-red-50 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+        </div>
       )}
 
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Loading...' : mode === 'signin' ? 'Sign In' : 'Sign Up'}
-      </button>
+      <div>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? (
+            <div className="flex items-center">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processing...
+            </div>
+          ) : (
+            submitButtonText || (mode === 'signin' ? 'Sign In' : 'Create Account')
+          )}
+        </button>
+      </div>
     </form>
   );
 }
