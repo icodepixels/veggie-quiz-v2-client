@@ -154,6 +154,16 @@ export default function QuizResults() {
                 Try Again
               </button>
             </div>
+
+            <p className="text-gray-600">
+              Don&apos;t have an account?{' '}
+              <a
+                href="/signin"
+                className="font-medium text-emerald-600 hover:text-emerald-500 transition-colors"
+              >
+                Sign in here
+              </a>
+            </p>
           </div>
         </div>
       </div>
