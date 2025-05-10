@@ -82,7 +82,7 @@ export default function QuizResults() {
           <div className={`bg-gradient-to-r ${resultCategory.color} px-6 py-8 text-center`}>
             <div className="text-6xl mb-4">{resultCategory.icon}</div>
             <h2 className="text-3xl font-bold text-white mb-2">{resultCategory.text}</h2>
-            <p className="text-white text-opacity-90">You've completed the quiz!</p>
+            <p className="text-white text-opacity-90">You&apos;ve completed the quiz!</p>
           </div>
 
           <div className="p-8">
