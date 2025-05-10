@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import { Providers } from '@/app/providers';
+import AuthInitializer from './components/AuthInitializer';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,6 +18,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Veggie Quiz",
   description: "Test your knowledge about vegetables!",
+  other: {
+    'google': 'notranslate',
+    'content-language': 'en',
+  },
 };
 
 export default function RootLayout({
@@ -25,11 +30,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" translate="no">
+      <head>
+        <meta name="google" content="notranslate" />
+        <meta httpEquiv="Content-Language" content="en" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
+          <AuthInitializer />
           <Navigation />
           <main className="max-w-7xl mx-auto px-4 py-8">
             {children}

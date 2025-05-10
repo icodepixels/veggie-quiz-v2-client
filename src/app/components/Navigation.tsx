@@ -8,6 +8,7 @@ import { fetchCategories } from '../store/categorySlice';
 export default function Navigation() {
   const dispatch = useAppDispatch();
   const { categories } = useAppSelector((state) => state.category);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -32,6 +33,29 @@ export default function Navigation() {
                 {category}
               </Link>
             ))}
+            {isAuthenticated ? (
+              <Link
+                href="/profile"
+                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Profile
+              </Link>
+            ) : (
+              <div className="flex space-x-4">
+                <Link
+                  href="/signin"
+                  className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  className="bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

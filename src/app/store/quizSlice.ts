@@ -82,11 +82,6 @@ const quizSlice = createSlice({
           return acc;
         }, {});
 
-        // Limit to 3 quizzes per category
-        Object.keys(groupedQuizzes).forEach(category => {
-          groupedQuizzes[category] = groupedQuizzes[category].slice(0, 3);
-        });
-
         state.quizzesByCategory = groupedQuizzes;
       })
       .addCase(fetchQuizzes.rejected, (state, action) => {
