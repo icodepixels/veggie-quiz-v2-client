@@ -19,8 +19,6 @@ export default function SignUp() {
 
       // Extract username from email (everything before @)
       const username = email.split('@')[0];
-
-      // First try to create a new account
       const createResponse = await fetch(`${API_BASE_URL}/users`, {
         method: 'POST',
         headers: {
@@ -29,70 +27,32 @@ export default function SignUp() {
         body: JSON.stringify({ email, username }),
       });
 
-      if (!createResponse.ok) {
-        // If user already exists, try to sign them in
-        if (createResponse.status === 400) {
-          // Step 1: Get token
-          const tokenResponse = await fetch(`${API_BASE_URL}/token`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
-          });
+      if (createResponse.ok) {
 
-          if (!tokenResponse.ok) {
-            throw new Error('Failed to sign in with existing account');
-          }
+        const tokenResponse = await fetch(`${API_BASE_URL}/token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
 
-          const { access_token } = await tokenResponse.json();
-
-          // Step 2: Get user details
-          const userResponse = await fetch(`${API_BASE_URL}/users/me`, {
-            headers: {
-              'Authorization': `Bearer ${access_token}`,
-            },
-          });
-
-          if (!userResponse.ok) {
-            throw new Error('Failed to fetch user details');
-          }
-
-          const userData = await userResponse.json();
-
-          // Step 3: Update Redux store
-          dispatch(signIn({
-            user: userData,
-            token: access_token,
-          }));
-
-          // Redirect to home page
-          router.push('/');
-          return;
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to sign in with existing account');
         }
-        throw new Error('Failed to create account');
+
+        const { access_token } = await tokenResponse.json();
+        const userData = await createResponse.json();
+        dispatch(signIn({
+          user: userData,
+          token: access_token,
+        }));
+
+        console.log('User signed in successfully', userData);
+
+        // Redirect to home page
+        router.push('/');
       }
-
-      // If account creation was successful, get the token and sign in
-      const { access_token } = await createResponse.json();
-      const userResponse = await fetch(`${API_BASE_URL}/users/me`, {
-        headers: {
-          'Authorization': `Bearer ${access_token}`,
-        },
-      });
-
-      if (!userResponse.ok) {
-        throw new Error('Failed to fetch user details');
-      }
-
-      const userData = await userResponse.json();
-      dispatch(signIn({
-        user: userData,
-        token: access_token,
-      }));
-
-      // Redirect to home page
-      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create account');
     }

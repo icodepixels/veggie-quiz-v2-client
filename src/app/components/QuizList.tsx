@@ -11,8 +11,11 @@ export default function QuizList() {
   const { quizzesByCategory, loading, error } = useAppSelector((state) => state.quiz);
 
   useEffect(() => {
-    dispatch(fetchQuizzes());
-  }, [dispatch]);
+    // Only fetch if we don't have any quizzes loaded
+    if (Object.keys(quizzesByCategory).length === 0) {
+      dispatch(fetchQuizzes());
+    }
+  }, [dispatch, quizzesByCategory]);
 
   if (loading) {
     return (
@@ -76,9 +79,9 @@ export default function QuizList() {
                 <Link
                   key={quiz.id}
                   href={`/quiz/${quiz.id}`}
-                  className="group relative block bg-gradient-to-br from-green-50 to-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-green-100"
+                  className="group relative block bg-gradient-to-br from-green-50 to-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-green-100 flex flex-col h-full"
                 >
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-grow">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-semibold text-lg text-gray-900 group-hover:text-emerald-600 transition-colors flex-1 pr-2">
                         {quiz.name}
@@ -87,10 +90,10 @@ export default function QuizList() {
                         {quiz.questions.length} questions
                       </span>
                     </div>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">
                       {quiz.description || 'Test your knowledge with this engaging quiz!'}
                     </p>
-                    <div className="flex items-center text-emerald-600 group-hover:translate-x-2 transition-transform">
+                    <div className="flex items-center text-emerald-600 group-hover:translate-x-2 transition-transform mt-auto">
                       <span className="text-sm font-medium">Start Quiz</span>
                       <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

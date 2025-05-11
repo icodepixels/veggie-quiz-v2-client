@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useAppSelector } from '@/app/store/hooks';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
@@ -27,7 +26,6 @@ interface Quiz {
 export default function QuizPage() {
   const params = useParams();
   const router = useRouter();
-  const { isAuthenticated, token } = useAppSelector((state) => state.auth);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -35,11 +33,13 @@ export default function QuizPage() {
   const [score, setScore] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
     const fetchQuiz = async () => {
+      if (hasFetchedRef.current) return;
+      hasFetchedRef.current = true;
+
       try {
         const quizId = params.id;
         if (!quizId) {
@@ -79,52 +79,9 @@ export default function QuizPage() {
       setSelectedAnswer(null);
       setShowExplanation(false);
     } else {
-      // Quiz is complete, save results and navigate to results page
+      // Quiz is complete, navigate to results page
       const totalQuestions = quiz?.questions.length ?? 0;
-      const percentage = Math.round((score / totalQuestions) * 100);
-
-      // Save results if user is authenticated
-      if (isAuthenticated && token) {
-        setIsSubmitting(true);
-        setError(null);
-        setMessage(null);
-
-        fetch(`${API_BASE_URL}/quiz-results`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            quiz_id: quiz?.id,
-            score: percentage,
-            correct_answers: score,
-            total_questions: totalQuestions,
-          }),
-        })
-        .then(response => {
-          if (!response.ok) {
-            return response.json().then(data => {
-              if (data.detail === 'You have already completed this quiz') {
-                setMessage(data.detail);
-              } else {
-                throw new Error(data.detail || 'Failed to save result');
-              }
-            });
-          }
-        })
-        .catch(error => {
-          console.error('Error saving result:', error);
-          setError(error instanceof Error ? error.message : 'Failed to save result');
-        })
-        .finally(() => {
-          setIsSubmitting(false);
-          router.push(`/quiz/${quiz?.id}/results?score=${score}&total=${totalQuestions}`);
-        });
-      } else {
-        // If not authenticated, just go to results page
-        router.push(`/quiz/${quiz?.id}/results?score=${score}&total=${totalQuestions}`);
-      }
+      router.push(`/quiz/${quiz?.id}/results?score=${score}&total=${totalQuestions}`);
     }
   };
 
@@ -250,41 +207,16 @@ export default function QuizPage() {
               </div>
             )}
 
-            {/* Message */}
-            {message && (
-              <div className="mb-8 p-4 bg-blue-50 rounded-xl border border-blue-100">
-                <div className="flex items-start">
-                  <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <p className="text-blue-800">{message}</p>
-                </div>
-              </div>
-            )}
-
             {/* Next button */}
             {selectedAnswer !== null && (
               <button
                 onClick={handleNextQuestion}
-                disabled={isSubmitting}
-                className="w-full bg-green-600 text-white py-3 px-4 rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center"
+                className="w-full bg-green-600 text-white py-3 px-4 rounded-xl hover:bg-green-700 transition-colors flex items-center justify-center"
               >
-                {isSubmitting ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    {currentQuestionIndex < quiz.questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
-                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </>
-                )}
+                {currentQuestionIndex < quiz.questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
+                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
               </button>
             )}
           </div>
