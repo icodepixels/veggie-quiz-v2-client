@@ -73,27 +73,27 @@ export default function QuizList() {
               {category}
             </h2>
           </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="p-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {quizzes.map((quiz) => (
                 <Link
                   key={quiz.id}
                   href={`/quiz/${quiz.id}`}
-                  className="group relative block bg-gradient-to-br from-green-50 to-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-green-100 flex flex-col h-full"
+                  className="group relative block bg-gradient-to-br from-green-50 to-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-green-100 flex flex-col aspect-square"
                 >
-                  <div className="p-6 flex flex-col flex-grow">
+                  <div className="p-4 flex flex-col flex-grow">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-lg text-gray-900 group-hover:text-emerald-600 transition-colors flex-1 pr-2">
+                      <h3 className="font-bold text-lg text-gray-900 group-hover:text-emerald-600 transition-colors flex-1 pr-2">
                         {quiz.name}
                       </h3>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 whitespace-nowrap flex-shrink-0">
                         {quiz.questions.length} questions
                       </span>
                     </div>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
                       {quiz.description || 'Test your knowledge with this engaging quiz!'}
                     </p>
-                    <div className="flex items-center text-emerald-600 group-hover:translate-x-2 transition-transform mt-auto">
+                    <div className="flex items-center text-emerald-600 group-hover:translate-x-2 transition-transform mt-auto pt-3 border-t border-green-100">
                       <span className="text-sm font-medium">Start Quiz</span>
                       <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
