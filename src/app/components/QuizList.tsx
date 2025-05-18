@@ -79,7 +79,7 @@ export default function QuizList() {
                           alt={quiz.name}
                           width={64}
                           height={64}
-                          className="rounded-xl object-cover w-full h-full"
+                          className="rounded object-cover w-full h-full"
                         />
                       </div>
                     )}
