@@ -44,22 +44,17 @@ export default function QuizList() {
   }
 
   return (
-    <div className="space-y-12">
+    <div>
       {Object.entries(quizzesByCategory).map(([category, quizzes]) => (
-        <div key={category} className="bg-white rounded-2xl shadow-lg overflow-hidden border border-green-100">
-          <div className="bg-white px-6 pt-6 pb-2">
-            <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3" style={{ borderColor: '#60a5fa' /* blue-400 */ }}>
-              {category}
-            </h2>
-          </div>
+        <div key={category} className="bg-white overflow-hidden">
           <div className="p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {quizzes.map((quiz, idx) => {
-                // Rotate border colors
+                // Custom border colors using hex values
                 const borderColors = [
-                  'border-blue-400',
-                  'border-pink-400',
-                  'border-teal-400'
+                  '#FBE9A7', '#388E3C', '#FBE9A7',
+                  '#FFF3D6', '#FF8A30', '#F57C00',
+                  '#3E2C1A', '#66BB6A', '#43A047'
                 ];
                 const themeColors = [
                   'blue',
@@ -73,7 +68,8 @@ export default function QuizList() {
                   <Link
                     key={quiz.id}
                     href={`/quiz/${quiz.id}?theme=${themeColor}`}
-                    className={`bg-white rounded-2xl shadow-md border-2 ${borderColor} flex flex-col p-6 w-full transition-transform hover:scale-105`}
+                    className={`bg-white rounded-2xl shadow-md border-2 flex flex-col p-6 w-full transition-transform hover:scale-105`}
+                    style={{ borderColor }}
                   >
                     {/* Profile image */}
                     {quiz.image && (

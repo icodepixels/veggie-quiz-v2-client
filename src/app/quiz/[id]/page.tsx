@@ -9,13 +9,13 @@ const getGradientStyle = (theme: string) => {
 
   switch (theme) {
     case 'pink':
-      gradientColors = 'linear-gradient(to right, white, #fbcfe8, #f472b6, #db2777, #f472b6, #fbcfe8, white)';
+      gradientColors = 'linear-gradient(to right, white, #FFF3D6, #FF8A30, #F57C00, #FF8A30, #FFF3D6, white)';
       break;
     case 'teal':
-      gradientColors = 'linear-gradient(to right, white, #99f6e4, #2dd4bf, #0d9488, #2dd4bf, #99f6e4, white)';
+      gradientColors = 'linear-gradient(to right, white, #66BB6A, #388E3C, #43A047, #388E3C, #66BB6A, white)';
       break;
     default: // blue
-      gradientColors = 'linear-gradient(to right, white, #bfdbfe, #60a5fa, #2563eb, #60a5fa, #bfdbfe, white)';
+      gradientColors = 'linear-gradient(to right, white, #FBE9A7, #FF8A30, #3E2C1A, #FF8A30, #FBE9A7, white)';
       break;
   }
 

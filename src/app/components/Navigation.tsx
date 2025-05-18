@@ -7,10 +7,14 @@ import { useAppSelector } from '../store/hooks';
 import Image from 'next/image';
 
 // Custom CSS for rainbow animation
+// Define styles using camelCase for consistent client/server rendering
 const rainbowStyle = {
-  backgroundImage: 'linear-gradient(to right, #8b5cf6, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6)',
+  backgroundImage: 'linear-gradient(to right, #FBE9A7, #388E3C, #66BB6A, #43A047, #FFF3D6, #FF8A30, #F57C00, #3E2C1A, #FBE9A7)',
   backgroundSize: '200% 100%',
-  animation: 'rainbowMove 8s linear infinite',
+  animationName: 'rainbowMove',
+  animationDuration: '8s',
+  animationTimingFunction: 'linear',
+  animationIterationCount: 'infinite',
 };
 
 export default function Navigation() {
@@ -45,7 +49,13 @@ export default function Navigation() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center py-2" onClick={closeMenu}>
               <Image
-                src="/logo-v2.png"
+                src="/veggie-quiz-carrot.png"
+                alt="Veggie Quiz Logo"
+                width={70}
+                height={70}
+              />
+              <Image
+                src="/logo-v4.png"
                 alt="Veggie Quiz Logo"
                 width={150}
                 height={75}
@@ -59,8 +69,8 @@ export default function Navigation() {
               href="/"
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2 ${
                 isActive('/')
-                  ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-400'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                  ? 'bg-yellow-50 text-amber-800 border-b-2 border-amber-400'
+                  : 'text-gray-700 hover:bg-yellow-50 hover:text-amber-700'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,8 +85,8 @@ export default function Navigation() {
                   href="/profile"
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2 ${
                     isActive('/profile')
-                      ? 'bg-pink-50 text-pink-600 border-b-2 border-pink-400'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-pink-600'
+                      ? 'bg-orange-50 text-orange-700 border-b-2 border-orange-400'
+                      : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
                   }`}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,8 +101,8 @@ export default function Navigation() {
                   href="/signin"
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2 ${
                     isActive('/signin')
-                      ? 'bg-teal-50 text-teal-600 border-b-2 border-teal-400'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-teal-600'
+                      ? 'bg-green-50 text-green-700 border-b-2 border-green-500'
+                      : 'text-gray-700 hover:bg-green-50 hover:text-green-600'
                   }`}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,7 +112,7 @@ export default function Navigation() {
                 </Link>
                 <Link
                   href="/signup"
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-400 transition-colors duration-200 flex items-center space-x-2 shadow-sm"
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-amber-600 text-white hover:bg-amber-500 transition-colors duration-200 flex items-center space-x-2 shadow-sm"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -156,8 +166,8 @@ export default function Navigation() {
             onClick={closeMenu}
             className={`block px-3 py-2 rounded-md text-base font-medium ${
               isActive('/')
-                ? 'bg-blue-50 text-blue-600'
-                : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                ? 'bg-yellow-50 text-amber-800'
+                : 'text-gray-700 hover:bg-yellow-50 hover:text-amber-700'
             }`}
           >
             <div className="flex items-center">
@@ -174,8 +184,8 @@ export default function Navigation() {
               onClick={closeMenu}
               className={`block px-3 py-2 rounded-md text-base font-medium ${
                 isActive('/profile')
-                  ? 'bg-pink-50 text-pink-600'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-pink-600'
+                  ? 'bg-orange-50 text-orange-700'
+                  : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
               }`}
             >
               <div className="flex items-center">
@@ -192,8 +202,8 @@ export default function Navigation() {
                 onClick={closeMenu}
                 className={`block px-3 py-2 rounded-md text-base font-medium ${
                   isActive('/signin')
-                    ? 'bg-teal-50 text-teal-600'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-teal-600'
+                    ? 'bg-green-50 text-green-700'
+                    : 'text-gray-700 hover:bg-green-50 hover:text-green-600'
                 }`}
               >
                 <div className="flex items-center">
@@ -206,7 +216,7 @@ export default function Navigation() {
               <Link
                 href="/signup"
                 onClick={closeMenu}
-                className="block px-3 py-2 rounded-md text-base font-medium bg-blue-500 text-white"
+                className="block px-3 py-2 rounded-md text-base font-medium bg-amber-600 text-white"
               >
                 <div className="flex items-center">
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
