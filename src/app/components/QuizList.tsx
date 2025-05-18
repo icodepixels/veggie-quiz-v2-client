@@ -52,8 +52,7 @@ export default function QuizList() {
               {quizzes.map((quiz, idx) => {
                 // Custom border colors using hex values
                 const borderColors = [
-                  '#FBE9A7', '#388E3C', '#FBE9A7',
-                  '#FFF3D6', '#FF8A30', '#F57C00',
+                  '#388E3C', '#FBE9A7', '#FF8A30', '#F57C00',
                   '#3E2C1A', '#66BB6A', '#43A047'
                 ];
                 const themeColors = [
@@ -92,7 +91,12 @@ export default function QuizList() {
                       {quiz.description || 'Test your knowledge with this engaging quiz!'}
                     </div>
                     <div className="mt-4">
-                      <span className="text-blue-500 text-sm underline hover:text-blue-700 transition-colors">
+                      <span
+                        className="text-sm underline transition-colors"
+                        style={{ color: borderColor, textDecoration: 'underline' }}
+                        onMouseEnter={(e) => e.currentTarget.style.filter = 'brightness(80%)'}
+                        onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(100%)'}
+                      >
                         Play Quiz
                       </span>
                     </div>
