@@ -253,7 +253,7 @@ export default function QuizPage() {
                       <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 mr-3">
                         {String.fromCharCode(65 + index)}
                       </span>
-                      {choice}
+                      <span className="text-gray-800">{choice}</span>
                     </div>
                   </button>
                 ))}
