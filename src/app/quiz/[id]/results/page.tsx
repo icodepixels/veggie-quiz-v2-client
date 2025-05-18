@@ -20,14 +20,59 @@ export default function QuizResults() {
 
   const score = Number(searchParams.get('score'));
   const total = Number(searchParams.get('total'));
+  const theme = searchParams.get('theme') || 'blue';
   const percentage = Math.round((score / total) * 100);
+
+  // Get theme-specific styling classes
+  const getThemeClasses = (theme: string) => {
+    switch (theme) {
+      case 'pink':
+        return {
+          border: 'border-pink-400',
+          text: 'text-pink-600',
+          bg: 'bg-pink-500',
+          hoverBg: 'hover:bg-pink-600',
+          bgLight: 'bg-pink-50',
+          borderLight: 'border-pink-200',
+          gradientFrom: 'from-pink-500',
+          gradientTo: 'to-pink-600',
+          borderColor: '#f472b6' // pink-400
+        };
+      case 'teal':
+        return {
+          border: 'border-teal-400',
+          text: 'text-teal-600',
+          bg: 'bg-teal-500',
+          hoverBg: 'hover:bg-teal-600',
+          bgLight: 'bg-teal-50',
+          borderLight: 'border-teal-200',
+          gradientFrom: 'from-teal-500',
+          gradientTo: 'to-teal-600',
+          borderColor: '#2dd4bf' // teal-400
+        };
+      default: // blue
+        return {
+          border: 'border-blue-400',
+          text: 'text-blue-600',
+          bg: 'bg-blue-500',
+          hoverBg: 'hover:bg-blue-600',
+          bgLight: 'bg-blue-50',
+          borderLight: 'border-blue-200',
+          gradientFrom: 'from-blue-500',
+          gradientTo: 'to-blue-600',
+          borderColor: '#60a5fa' // blue-400
+        };
+    }
+  };
+
+  const themeClasses = getThemeClasses(theme);
 
   // Determine the result category and color
   const getResultCategory = () => {
-    if (percentage >= 90) return { text: 'Outstanding!', color: 'from-green-500 to-green-600', icon: '🌱' };
-    if (percentage >= 70) return { text: 'Great Job!', color: 'from-green-400 to-green-500', icon: '🌿' };
-    if (percentage >= 50) return { text: 'Good Effort!', color: 'from-yellow-400 to-yellow-500', icon: '🌻' };
-    return { text: 'Keep Growing!', color: 'from-orange-400 to-orange-500', icon: '🌱' };
+    if (percentage >= 90) return { text: 'Outstanding!', icon: '🌱' };
+    if (percentage >= 70) return { text: 'Great Job!', icon: '🌿' };
+    if (percentage >= 50) return { text: 'Good Effort!', icon: '🌻' };
+    return { text: 'Keep Growing!', icon: '🌱' };
   };
 
   const resultCategory = getResultCategory();
@@ -122,18 +167,23 @@ export default function QuizResults() {
   };
 
   const ResultsContent = () => (
-    <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-green-100">
-      <div className={`bg-gradient-to-r ${resultCategory.color} px-6 py-8 text-center`}>
-        <div className="text-6xl mb-4">{resultCategory.icon}</div>
-        <h2 className="text-3xl font-bold text-white mb-2">{resultCategory.text}</h2>
-        <p className="text-white text-opacity-90">You&apos;ve completed the quiz!</p>
+    <div className={`bg-white shadow-md rounded-2xl overflow-hidden border-2 ${themeClasses.border}`}>
+      <div className="bg-white px-6 pt-6 pb-2">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3" style={{ borderColor: themeClasses.borderColor }}>
+            {resultCategory.text}
+          </h2>
+          <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight}`}>
+            Quiz Complete
+          </span>
+        </div>
       </div>
 
       <div className="p-8">
         {/* Score Display */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-green-50 to-white border-4 border-green-100 mb-4">
-            <span className="text-4xl font-bold text-green-600">
+          <div className={`inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-${theme}-50 to-white border-4 ${themeClasses.border} mb-4`}>
+            <span className={`text-4xl font-bold ${themeClasses.text}`}>
               {percentage}%
             </span>
           </div>
@@ -144,29 +194,29 @@ export default function QuizResults() {
 
         {/* Messages */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-100">
+          <div className="mb-6 p-4 bg-pink-50 rounded-xl border-2 border-pink-200">
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-red-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-pink-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <p className="text-red-800">{error}</p>
+              <p className="text-pink-800">{error}</p>
             </div>
           </div>
         )}
 
         {message && (
-          <div className="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+          <div className={`mb-6 p-4 ${themeClasses.bgLight} rounded-xl border-2 ${themeClasses.borderLight}`}>
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-5 h-5 ${themeClasses.text} mt-0.5 mr-2`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-blue-800">{message}</p>
+              <p className={`${themeClasses.text}`}>{message}</p>
             </div>
           </div>
         )}
 
         {isSubmitting && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+          <div className="mb-6 p-4 bg-gray-50 rounded-xl border-2 border-gray-200">
             <div className="flex items-center justify-center">
               <svg className="animate-spin h-5 w-5 text-gray-600 mr-2" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -181,7 +231,7 @@ export default function QuizResults() {
         <div className="space-y-4">
           <button
             onClick={() => router.push('/')}
-            className="w-full bg-green-600 text-white py-3 px-4 rounded-xl hover:bg-green-700 transition-colors flex items-center justify-center"
+            className={`w-full ${themeClasses.bg} text-white py-3 px-4 rounded-xl ${themeClasses.hoverBg} transition-colors flex items-center justify-center shadow-sm`}
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -190,7 +240,7 @@ export default function QuizResults() {
           </button>
           <button
             onClick={() => router.back()}
-            className="w-full bg-white text-gray-700 py-3 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors flex items-center justify-center"
+            className="w-full bg-white text-gray-700 py-3 px-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 transition-colors flex items-center justify-center"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -203,7 +253,7 @@ export default function QuizResults() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         {/* Results Content */}
         <div className={`${!isAuthenticated ? 'blur-sm' : ''}`}>
@@ -214,14 +264,14 @@ export default function QuizResults() {
       {/* Auth Modal */}
       {!isAuthenticated && (
         <div className="fixed top-16 left-0 right-0 bottom-0 bg-white/80 backdrop-blur-sm flex items-center justify-center p-4 z-40">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 relative border border-green-100">
+          <div className={`bg-white rounded-2xl shadow-md max-w-md w-full p-8 relative border-2 ${themeClasses.border}`}>
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-500 mb-4">
+              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br ${themeClasses.gradientFrom} ${themeClasses.gradientTo} mb-4`}>
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
                 {authMode === 'signin' ? 'Sign in to see your results' : 'Create an account to see your results'}
               </h2>
               <p className="text-gray-600">
@@ -245,7 +295,7 @@ export default function QuizResults() {
                     Don&apos;t have an account?{' '}
                     <button
                       onClick={() => setAuthMode('signup')}
-                      className="font-medium text-emerald-600 hover:text-emerald-500 transition-colors"
+                      className={`font-medium ${themeClasses.text} hover:${themeClasses.hoverBg} transition-colors`}
                     >
                       Create one here
                     </button>
@@ -255,7 +305,7 @@ export default function QuizResults() {
                     Already have an account?{' '}
                     <button
                       onClick={() => setAuthMode('signin')}
-                      className="font-medium text-emerald-600 hover:text-emerald-500 transition-colors"
+                      className={`font-medium ${themeClasses.text} hover:${themeClasses.hoverBg} transition-colors`}
                     >
                       Sign in here
                     </button>
