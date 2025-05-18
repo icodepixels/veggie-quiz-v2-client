@@ -202,9 +202,9 @@ export default function QuizPage() {
           {/* Main Quiz Container with very small margin to show the gradient border */}
           <div className="relative bg-white rounded-xl m-0.5 overflow-hidden z-10">
             <div className="bg-white px-6 pt-6 pb-2">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3" style={{ borderColor: theme === 'blue' ? '#60a5fa' : theme === 'pink' ? '#f472b6' : '#2dd4bf' }}>{quiz.name}</h2>
-                <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight} whitespace-nowrap`}>
+                <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight} whitespace-nowrap self-start sm:self-auto`}>
                   Question {currentQuestionIndex + 1} of {quiz.questions.length}
                 </span>
               </div>
