@@ -55,18 +55,12 @@ export default function QuizList() {
                   '#388E3C', '#FBE9A7', '#FF8A30', '#F57C00',
                   '#3E2C1A', '#66BB6A', '#43A047'
                 ];
-                const themeColors = [
-                  'blue',
-                  'pink',
-                  'teal'
-                ];
                 const borderColor = borderColors[idx % borderColors.length];
-                const themeColor = themeColors[idx % themeColors.length];
 
                 return (
                   <Link
                     key={quiz.id}
-                    href={`/quiz/${quiz.id}?theme=${themeColor}`}
+                    href={`/quiz/${quiz.id}?theme=${encodeURIComponent(borderColor)}`}
                     className={`bg-white rounded-2xl shadow-md border-2 flex flex-col p-6 w-full transition-transform hover:scale-105`}
                     style={{ borderColor }}
                   >

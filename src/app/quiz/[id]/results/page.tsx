@@ -20,52 +20,85 @@ export default function QuizResults() {
 
   const score = Number(searchParams.get('score'));
   const total = Number(searchParams.get('total'));
-  const theme = searchParams.get('theme') || 'blue';
+  // Default to a green theme if no valid theme color is provided
+  const theme = searchParams.get('theme') || '#388E3C';
   const percentage = Math.round((score / total) * 100);
 
+  // Validate if the theme is a proper hex color, otherwise use default green
   // Get theme-specific styling classes
-  const getThemeClasses = (theme: string) => {
-    switch (theme) {
-      case 'pink': // Orange theme
-        return {
-          border: 'border-amber-500',
-          text: 'text-amber-600',
-          bg: 'bg-amber-500',
-          hoverBg: 'hover:bg-amber-600',
-          bgLight: 'bg-amber-50',
-          borderLight: 'border-amber-200',
-          gradientFrom: 'from-amber-400',
-          gradientTo: 'to-amber-600',
-          borderColor: '#FF8A30' // Main amber color
-        };
-      case 'teal': // Green theme
-        return {
-          border: 'border-green-600',
-          text: 'text-green-700',
-          bg: 'bg-green-600',
-          hoverBg: 'hover:bg-green-700',
-          bgLight: 'bg-green-50',
-          borderLight: 'border-green-200',
-          gradientFrom: 'from-green-500',
-          gradientTo: 'to-green-700',
-          borderColor: '#388E3C' // Main green color
-        };
-      default: // "blue" (earth tones)
-        return {
-          border: 'border-amber-300',
-          text: 'text-amber-800',
-          bg: 'bg-amber-600',
-          hoverBg: 'hover:bg-amber-700',
-          bgLight: 'bg-amber-50',
-          borderLight: 'border-amber-200',
-          gradientFrom: 'from-amber-300',
-          gradientTo: 'to-amber-700',
-          borderColor: '#FBE9A7' // Light amber color
-        };
+  const getThemeClasses = (themeColor: string) => {
+    // Generate theme classes based on the hex color
+    const decodedColor = decodeURIComponent(themeColor);
+
+    // Set default classes (amber/earth tones as default)
+    const defaultClasses = {
+      border: 'border-amber-500',
+      text: 'text-amber-700',
+      bg: 'bg-amber-500',
+      hoverBg: 'hover:bg-amber-600',
+      bgLight: 'bg-amber-50',
+      borderLight: 'border-amber-200',
+      gradientFrom: 'from-amber-500',
+      gradientTo: 'to-amber-600',
+      borderColor: decodedColor
+    };
+
+    // Green colors (#388E3C, #66BB6A, #43A047)
+    if (decodedColor.match(/#(388E3C|66BB6A|43A047)/i)) {
+      return {
+        border: 'border-green-600',
+        text: 'text-green-700',
+        bg: 'bg-green-600',
+        hoverBg: 'hover:bg-green-700',
+        bgLight: 'bg-green-50',
+        borderLight: 'border-green-200',
+        gradientFrom: 'from-green-500',
+        gradientTo: 'to-green-700',
+        borderColor: decodedColor
+      };
     }
+
+    // Orange/brown colors (#FF8A30, #F57C00, #3E2C1A)
+    if (decodedColor.match(/#(FF8A30|F57C00|3E2C1A)/i)) {
+      return {
+        border: 'border-amber-500',
+        text: 'text-amber-700',
+        bg: 'bg-amber-500',
+        hoverBg: 'hover:bg-amber-600',
+        bgLight: 'bg-amber-50',
+        borderLight: 'border-amber-200',
+        gradientFrom: 'from-amber-400',
+        gradientTo: 'to-amber-600',
+        borderColor: decodedColor
+      };
+    }
+
+    // Light yellow (#FBE9A7)
+    if (decodedColor.match(/#FBE9A7/i)) {
+      return {
+        border: 'border-yellow-300',
+        text: 'text-yellow-800',
+        bg: 'bg-yellow-400',
+        hoverBg: 'hover:bg-yellow-500',
+        bgLight: 'bg-yellow-50',
+        borderLight: 'border-yellow-200',
+        gradientFrom: 'from-yellow-300',
+        gradientTo: 'to-yellow-400',
+        borderColor: decodedColor
+      };
+    }
+
+    return defaultClasses;
   };
 
-  const themeClasses = getThemeClasses(theme);
+  // Make sure we're using the actual hex color theme
+  const decodedTheme = decodeURIComponent(theme);
+
+  // Validate the theme format is a proper hex color
+  const isValidHexColor = /^#([0-9A-F]{3}){1,2}$/i.test(decodedTheme);
+  const validThemeColor = isValidHexColor ? decodedTheme : '#388E3C';
+
+  const themeClasses = getThemeClasses(validThemeColor);
 
   // Determine the result category and color
   const getResultCategory = () => {
@@ -167,10 +200,10 @@ export default function QuizResults() {
   };
 
   const ResultsContent = () => (
-    <div className={`bg-white shadow-md rounded-2xl overflow-hidden border-2 ${themeClasses.border}`}>
+          <div className="bg-white shadow-md rounded-2xl overflow-hidden border-2" style={{ borderColor: validThemeColor }}>
       <div className="bg-white px-6 pt-6 pb-2">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-          <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3 quiz-title" style={{ borderColor: themeClasses.borderColor }}>
+          <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3 quiz-title" style={{ borderColor: validThemeColor }}>
             {resultCategory.text}
           </h2>
           <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight} self-start sm:self-auto`}>
@@ -182,12 +215,10 @@ export default function QuizResults() {
       <div className="p-8">
         {/* Score Display */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br border-4 mb-4"
+                              <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br border-4 mb-4"
                style={{
-                 borderColor: themeClasses.borderColor,
-                 background: theme === 'pink' ? 'linear-gradient(to bottom right, #FFF3D6, white)' :
-                              theme === 'teal' ? 'linear-gradient(to bottom right, #E8F5E9, white)' :
-                              'linear-gradient(to bottom right, #FEF9E7, white)'
+                 borderColor: validThemeColor,
+                 background: `linear-gradient(to bottom right, ${validThemeColor}22, white)`
                }}>
             <span className={`text-4xl font-bold ${themeClasses.text}`}>
               {percentage}%
@@ -235,10 +266,15 @@ export default function QuizResults() {
 
         {/* Action Buttons */}
         <div className="space-y-4">
-          <button
-            onClick={() => router.push('/')}
-            className={`w-full ${themeClasses.bg} text-white py-3 px-4 rounded-xl ${themeClasses.hoverBg} transition-colors flex items-center justify-center shadow-sm`}
-          >
+                      <button
+              onClick={() => router.push('/')}
+              className="w-full text-white py-3 px-4 rounded-xl transition-colors flex items-center justify-center shadow-sm"
+                            style={{
+                backgroundColor: validThemeColor
+              }}
+              onMouseOver={(e) => e.currentTarget.style.filter = 'brightness(90%)'}
+              onMouseOut={(e) => e.currentTarget.style.filter = 'brightness(100%)'}
+            >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
@@ -270,9 +306,10 @@ export default function QuizResults() {
       {/* Auth Modal */}
       {!isAuthenticated && (
         <div className="fixed top-16 left-0 right-0 bottom-0 bg-white/80 backdrop-blur-sm flex items-center justify-center p-4 z-40">
-          <div className={`bg-white rounded-2xl shadow-md max-w-md w-full p-8 relative border-2 ${themeClasses.border}`}>
+          <div className="bg-white rounded-2xl shadow-md max-w-md w-full p-8 relative border-2" style={{ borderColor: validThemeColor }}>
             <div className="text-center mb-8">
-              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br ${themeClasses.gradientFrom} ${themeClasses.gradientTo} mb-4`}>
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
+                 style={{ background: `linear-gradient(to bottom right, ${validThemeColor}, ${validThemeColor}99)` }}>
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
@@ -301,7 +338,10 @@ export default function QuizResults() {
                     Don&apos;t have an account?{' '}
                     <button
                       onClick={() => setAuthMode('signup')}
-                      className={`font-medium ${themeClasses.text} hover:${themeClasses.hoverBg} transition-colors`}
+                      className="font-medium transition-colors"
+                      style={{ color: validThemeColor }}
+                      onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                      onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
                     >
                       Create one here
                     </button>
@@ -311,7 +351,10 @@ export default function QuizResults() {
                     Already have an account?{' '}
                     <button
                       onClick={() => setAuthMode('signin')}
-                      className={`font-medium ${themeClasses.text} hover:${themeClasses.hoverBg} transition-colors`}
+                      className="font-medium transition-colors"
+                      style={{ color: validThemeColor }}
+                      onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                      onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
                     >
                       Sign in here
                     </button>

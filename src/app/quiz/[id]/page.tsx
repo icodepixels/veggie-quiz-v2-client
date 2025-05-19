@@ -5,19 +5,12 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 // Custom CSS for theme-specific gradient animation and card shadow
 const getGradientStyle = (theme: string) => {
-  let gradientColors;
+  // Create a gradient based on the theme color (which is now a hex value)
+  // Extract the main color from the URL-encoded theme
+  const themeColor = decodeURIComponent(theme);
 
-  switch (theme) {
-    case 'pink':
-      gradientColors = 'linear-gradient(to right, white, #FFF3D6, #FF8A30, #F57C00, #FF8A30, #FFF3D6, white)';
-      break;
-    case 'teal':
-      gradientColors = 'linear-gradient(to right, white, #66BB6A, #388E3C, #43A047, #388E3C, #66BB6A, white)';
-      break;
-    default: // blue
-      gradientColors = 'linear-gradient(to right, white, #FBE9A7, #FF8A30, #3E2C1A, #FF8A30, #FBE9A7, white)';
-      break;
-  }
+  // Create a gradient that uses the theme color
+  const gradientColors = `linear-gradient(to right, white, ${themeColor}, ${themeColor}, white)`;
 
   return {
     backgroundImage: gradientColors,
@@ -60,39 +53,61 @@ export default function QuizPage() {
   const [error, setError] = useState<string | null>(null);
   const hasFetchedRef = useRef(false);
 
-  const getThemeClasses = (theme: string) => {
-    switch (theme) {
-      case 'pink': // Orange theme
-        return {
-          border: 'border-amber-500',
-          text: 'text-amber-600',
-          bg: 'bg-amber-500',
-          hoverBg: 'hover:bg-amber-600',
-          bgLight: 'bg-amber-50',
-          borderLight: 'border-amber-200',
-          correct: 'bg-amber-50 border-amber-500 text-amber-700'
-        };
-      case 'teal': // Green theme
-        return {
-          border: 'border-green-600',
-          text: 'text-green-700',
-          bg: 'bg-green-600',
-          hoverBg: 'hover:bg-green-700',
-          bgLight: 'bg-green-50',
-          borderLight: 'border-green-200',
-          correct: 'bg-green-50 border-green-600 text-green-700'
-        };
-      default: // blue - Earth tones
-        return {
-          border: 'border-amber-300',
-          text: 'text-amber-800',
-          bg: 'bg-amber-600',
-          hoverBg: 'hover:bg-amber-700',
-          bgLight: 'bg-amber-50',
-          borderLight: 'border-amber-200',
-          correct: 'bg-amber-50 border-amber-500 text-amber-800'
-        };
+    const getThemeClasses = (themeColor: string) => {
+    // Generate theme classes based on the hex color
+    const decodedColor = decodeURIComponent(themeColor);
+
+    // Set default classes (amber/earth tones as default)
+    const defaultClasses = {
+      border: 'border-amber-500',
+      text: 'text-amber-700',
+      bg: 'bg-amber-500',
+      hoverBg: 'hover:bg-amber-600',
+      bgLight: 'bg-amber-50',
+      borderLight: 'border-amber-200',
+      correct: 'bg-amber-50 border-amber-500 text-amber-700'
+    };
+
+    // Green colors (#388E3C, #66BB6A, #43A047)
+    if (decodedColor.match(/#(388E3C|66BB6A|43A047)/i)) {
+      return {
+        border: 'border-green-600',
+        text: 'text-green-700',
+        bg: 'bg-green-600',
+        hoverBg: 'hover:bg-green-700',
+        bgLight: 'bg-green-50',
+        borderLight: 'border-green-200',
+        correct: 'bg-green-50 border-green-600 text-green-700'
+      };
     }
+
+    // Orange/brown colors (#FF8A30, #F57C00, #3E2C1A)
+    if (decodedColor.match(/#(FF8A30|F57C00|3E2C1A)/i)) {
+      return {
+        border: 'border-amber-500',
+        text: 'text-amber-700',
+        bg: 'bg-amber-500',
+        hoverBg: 'hover:bg-amber-600',
+        bgLight: 'bg-amber-50',
+        borderLight: 'border-amber-200',
+        correct: 'bg-amber-50 border-amber-500 text-amber-700'
+      };
+    }
+
+    // Light yellow (#FBE9A7)
+    if (decodedColor.match(/#FBE9A7/i)) {
+      return {
+        border: 'border-yellow-300',
+        text: 'text-yellow-800',
+        bg: 'bg-yellow-400',
+        hoverBg: 'hover:bg-yellow-500',
+        bgLight: 'bg-yellow-50',
+        borderLight: 'border-yellow-200',
+        correct: 'bg-yellow-50 border-yellow-400 text-yellow-800'
+      };
+    }
+
+    return defaultClasses;
   };
 
   const themeClasses = getThemeClasses(theme);
@@ -200,7 +215,7 @@ export default function QuizPage() {
           <div className="relative bg-white rounded-xl m-0.5 overflow-hidden z-10">
             <div className="bg-white px-6 pt-6 pb-2">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3 quiz-title" style={{ borderColor: theme === 'blue' ? '#FBE9A7' : theme === 'pink' ? '#FF8A30' : '#388E3C' }}>{quiz.name}</h2>
+                <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3 quiz-title" style={{ borderColor: decodeURIComponent(theme) }}>{quiz.name}</h2>
                 <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight} whitespace-nowrap self-start sm:self-auto`}>
                   Question {currentQuestionIndex + 1} of {quiz.questions.length}
                 </span>
