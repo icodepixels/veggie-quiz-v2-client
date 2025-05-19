@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "./components/Navigation";
 import { Providers } from '@/app/providers';
 import AuthInitializer from './components/AuthInitializer';
+import { Nunito, Fredoka } from 'next/font/google';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +14,21 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Load Nunito font for body text
+const nunito = Nunito({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-nunito',
+});
+
+// Load Fredoka for headings and titles
+const fredoka = Fredoka({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-fredoka',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -30,14 +46,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" translate="no">
+    <html lang="en" translate="no" className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${fredoka.variable} antialiased`}>
       <head>
         <meta name="google" content="notranslate" />
         <meta httpEquiv="Content-Language" content="en" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={nunito.className}>
         <Providers>
           <AuthInitializer />
           <Navigation />

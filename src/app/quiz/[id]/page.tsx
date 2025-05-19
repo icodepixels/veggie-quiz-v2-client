@@ -200,7 +200,7 @@ export default function QuizPage() {
           <div className="relative bg-white rounded-xl m-0.5 overflow-hidden z-10">
             <div className="bg-white px-6 pt-6 pb-2">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3" style={{ borderColor: theme === 'blue' ? '#FBE9A7' : theme === 'pink' ? '#FF8A30' : '#388E3C' }}>{quiz.name}</h2>
+                <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3 quiz-title" style={{ borderColor: theme === 'blue' ? '#FBE9A7' : theme === 'pink' ? '#FF8A30' : '#388E3C' }}>{quiz.name}</h2>
                 <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight} whitespace-nowrap self-start sm:self-auto`}>
                   Question {currentQuestionIndex + 1} of {quiz.questions.length}
                 </span>

@@ -86,7 +86,7 @@ export default function QuizList() {
                     )}
                     {/* Name and title */}
                     <div className="mb-2">
-                      <div className="font-bold text-lg text-gray-900">{quiz.name}</div>
+                      <div className="font-bold text-lg text-gray-900 quiz-card-name">{quiz.name}</div>
                     </div>
                     {/* Main text */}
                     <div className="text-gray-800 text-base mt-2 flex-1">

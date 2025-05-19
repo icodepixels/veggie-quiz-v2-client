@@ -170,7 +170,7 @@ export default function QuizResults() {
     <div className={`bg-white shadow-md rounded-2xl overflow-hidden border-2 ${themeClasses.border}`}>
       <div className="bg-white px-6 pt-6 pb-2">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-          <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3" style={{ borderColor: themeClasses.borderColor }}>
+          <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3 quiz-title" style={{ borderColor: themeClasses.borderColor }}>
             {resultCategory.text}
           </h2>
           <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight} self-start sm:self-auto`}>
