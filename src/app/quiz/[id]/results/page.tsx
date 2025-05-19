@@ -26,41 +26,41 @@ export default function QuizResults() {
   // Get theme-specific styling classes
   const getThemeClasses = (theme: string) => {
     switch (theme) {
-      case 'pink':
+      case 'pink': // Orange theme
         return {
-          border: 'border-pink-400',
-          text: 'text-pink-600',
-          bg: 'bg-pink-500',
-          hoverBg: 'hover:bg-pink-600',
-          bgLight: 'bg-pink-50',
-          borderLight: 'border-pink-200',
-          gradientFrom: 'from-pink-500',
-          gradientTo: 'to-pink-600',
-          borderColor: '#f472b6' // pink-400
+          border: 'border-amber-500',
+          text: 'text-amber-600',
+          bg: 'bg-amber-500',
+          hoverBg: 'hover:bg-amber-600',
+          bgLight: 'bg-amber-50',
+          borderLight: 'border-amber-200',
+          gradientFrom: 'from-amber-400',
+          gradientTo: 'to-amber-600',
+          borderColor: '#FF8A30' // Main amber color
         };
-      case 'teal':
+      case 'teal': // Green theme
         return {
-          border: 'border-teal-400',
-          text: 'text-teal-600',
-          bg: 'bg-teal-500',
-          hoverBg: 'hover:bg-teal-600',
-          bgLight: 'bg-teal-50',
-          borderLight: 'border-teal-200',
-          gradientFrom: 'from-teal-500',
-          gradientTo: 'to-teal-600',
-          borderColor: '#2dd4bf' // teal-400
+          border: 'border-green-600',
+          text: 'text-green-700',
+          bg: 'bg-green-600',
+          hoverBg: 'hover:bg-green-700',
+          bgLight: 'bg-green-50',
+          borderLight: 'border-green-200',
+          gradientFrom: 'from-green-500',
+          gradientTo: 'to-green-700',
+          borderColor: '#388E3C' // Main green color
         };
-      default: // blue
+      default: // "blue" (earth tones)
         return {
-          border: 'border-blue-400',
-          text: 'text-blue-600',
-          bg: 'bg-blue-500',
-          hoverBg: 'hover:bg-blue-600',
-          bgLight: 'bg-blue-50',
-          borderLight: 'border-blue-200',
-          gradientFrom: 'from-blue-500',
-          gradientTo: 'to-blue-600',
-          borderColor: '#60a5fa' // blue-400
+          border: 'border-amber-300',
+          text: 'text-amber-800',
+          bg: 'bg-amber-600',
+          hoverBg: 'hover:bg-amber-700',
+          bgLight: 'bg-amber-50',
+          borderLight: 'border-amber-200',
+          gradientFrom: 'from-amber-300',
+          gradientTo: 'to-amber-700',
+          borderColor: '#FBE9A7' // Light amber color
         };
     }
   };
@@ -169,11 +169,11 @@ export default function QuizResults() {
   const ResultsContent = () => (
     <div className={`bg-white shadow-md rounded-2xl overflow-hidden border-2 ${themeClasses.border}`}>
       <div className="bg-white px-6 pt-6 pb-2">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3" style={{ borderColor: themeClasses.borderColor }}>
             {resultCategory.text}
           </h2>
-          <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight}`}>
+          <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight} self-start sm:self-auto`}>
             Quiz Complete
           </span>
         </div>
@@ -182,7 +182,13 @@ export default function QuizResults() {
       <div className="p-8">
         {/* Score Display */}
         <div className="text-center mb-8">
-          <div className={`inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-${theme}-50 to-white border-4 ${themeClasses.border} mb-4`}>
+          <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br border-4 mb-4"
+               style={{
+                 borderColor: themeClasses.borderColor,
+                 background: theme === 'pink' ? 'linear-gradient(to bottom right, #FFF3D6, white)' :
+                              theme === 'teal' ? 'linear-gradient(to bottom right, #E8F5E9, white)' :
+                              'linear-gradient(to bottom right, #FEF9E7, white)'
+               }}>
             <span className={`text-4xl font-bold ${themeClasses.text}`}>
               {percentage}%
             </span>
@@ -194,12 +200,12 @@ export default function QuizResults() {
 
         {/* Messages */}
         {error && (
-          <div className="mb-6 p-4 bg-pink-50 rounded-xl border-2 border-pink-200">
+          <div className="mb-6 p-4 bg-red-50 rounded-xl border-2 border-red-200">
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-pink-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-red-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <p className="text-pink-800">{error}</p>
+              <p className="text-red-800">{error}</p>
             </div>
           </div>
         )}

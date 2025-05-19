@@ -70,15 +70,17 @@ export default function QuizList() {
                     className={`bg-white rounded-2xl shadow-md border-2 flex flex-col p-6 w-full transition-transform hover:scale-105`}
                     style={{ borderColor }}
                   >
-                    {/* Profile image */}
                     {quiz.image && (
-                      <div className="w-16 h-16 mb-4">
+                      <div className="relative w-full mb-5 overflow-hidden group">
+                        <div className="pb-[100%]"></div> {/* Creates a square aspect ratio */}
+                        <div className="absolute inset-0 border-2 rounded-lg z-10 transition-all duration-300 group-hover:border-0" style={{ borderColor }} />
+                        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-20" />
                         <Image
                           src={quiz.image}
                           alt={quiz.name}
-                          width={64}
-                          height={64}
-                          className="rounded object-cover w-full h-full"
+                          width={500}
+                          height={500}
+                          className="rounded-lg object-cover absolute inset-0 w-full h-full transform transition-transform duration-500 group-hover:scale-110 z-0"
                         />
                       </div>
                     )}

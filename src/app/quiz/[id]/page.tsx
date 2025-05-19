@@ -26,9 +26,6 @@ const getGradientStyle = (theme: string) => {
   };
 };
 
-const cardShadowStyle = {
-  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-};
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
@@ -65,35 +62,35 @@ export default function QuizPage() {
 
   const getThemeClasses = (theme: string) => {
     switch (theme) {
-      case 'pink':
+      case 'pink': // Orange theme
         return {
-          border: 'border-pink-400',
-          text: 'text-pink-600',
-          bg: 'bg-pink-500',
-          hoverBg: 'hover:bg-pink-600',
-          bgLight: 'bg-pink-50',
-          borderLight: 'border-pink-200',
-          correct: 'bg-pink-50 border-pink-500 text-pink-700'
+          border: 'border-amber-500',
+          text: 'text-amber-600',
+          bg: 'bg-amber-500',
+          hoverBg: 'hover:bg-amber-600',
+          bgLight: 'bg-amber-50',
+          borderLight: 'border-amber-200',
+          correct: 'bg-amber-50 border-amber-500 text-amber-700'
         };
-      case 'teal':
+      case 'teal': // Green theme
         return {
-          border: 'border-teal-400',
-          text: 'text-teal-600',
-          bg: 'bg-teal-500',
-          hoverBg: 'hover:bg-teal-600',
-          bgLight: 'bg-teal-50',
-          borderLight: 'border-teal-200',
-          correct: 'bg-teal-50 border-teal-500 text-teal-700'
+          border: 'border-green-600',
+          text: 'text-green-700',
+          bg: 'bg-green-600',
+          hoverBg: 'hover:bg-green-700',
+          bgLight: 'bg-green-50',
+          borderLight: 'border-green-200',
+          correct: 'bg-green-50 border-green-600 text-green-700'
         };
-      default: // blue
+      default: // blue - Earth tones
         return {
-          border: 'border-blue-400',
-          text: 'text-blue-600',
-          bg: 'bg-blue-500',
-          hoverBg: 'hover:bg-blue-600',
-          bgLight: 'bg-blue-50',
-          borderLight: 'border-blue-200',
-          correct: 'bg-blue-50 border-blue-500 text-blue-700'
+          border: 'border-amber-300',
+          text: 'text-amber-800',
+          bg: 'bg-amber-600',
+          hoverBg: 'hover:bg-amber-700',
+          bgLight: 'bg-amber-50',
+          borderLight: 'border-amber-200',
+          correct: 'bg-amber-50 border-amber-500 text-amber-800'
         };
     }
   };
@@ -193,7 +190,7 @@ export default function QuizPage() {
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={cardShadowStyle}>
+        <div className="relative rounded-2xl overflow-hidden">
           {/* Theme-based Gradient Border Container */}
           <div className="absolute inset-0">
             <div className="absolute inset-0" style={gradientStyle}></div>
@@ -203,7 +200,7 @@ export default function QuizPage() {
           <div className="relative bg-white rounded-xl m-0.5 overflow-hidden z-10">
             <div className="bg-white px-6 pt-6 pb-2">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3" style={{ borderColor: theme === 'blue' ? '#60a5fa' : theme === 'pink' ? '#f472b6' : '#2dd4bf' }}>{quiz.name}</h2>
+                <h2 className="text-2xl font-extrabold text-gray-900 border-l-4 pl-3" style={{ borderColor: theme === 'blue' ? '#FBE9A7' : theme === 'pink' ? '#FF8A30' : '#388E3C' }}>{quiz.name}</h2>
                 <span className={`text-gray-700 text-sm font-medium px-2 py-0.5 rounded-full ${themeClasses.bgLight} border ${themeClasses.borderLight} whitespace-nowrap self-start sm:self-auto`}>
                   Question {currentQuestionIndex + 1} of {quiz.questions.length}
                 </span>
@@ -263,7 +260,7 @@ export default function QuizPage() {
               {showExplanation && (
                 <div className="mb-8 p-4 bg-gray-50 rounded-xl border-2 border-gray-200">
                   <div className="flex items-start">
-                    <svg className={`w-5 h-5 ${themeClasses.text} mt-0.5 mr-2`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-5 h-5 ${themeClasses.text} mt-0.5 mr-2 min-w-5`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <p className="text-gray-800">{currentQuestion.explanation}</p>
