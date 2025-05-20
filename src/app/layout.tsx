@@ -71,7 +71,7 @@ export default function RootLayout({
         <meta property="twitter:url" content="https://veggiequiz.com/" />
         <meta property="twitter:title" content="Veggie Quiz - Fun Plant-Based Nutrition Learning" />
         <meta property="twitter:description" content="Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health." />
-        <meta property="twitter:image" content="//logo-v4.png" />
+        <meta property="twitter:image" content="/logo-v4.png" />
 
         {/* Favicon */}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
