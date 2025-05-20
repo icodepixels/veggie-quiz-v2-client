@@ -2,11 +2,10 @@ import { ImageResponse } from 'next/og';
 import { getQuizById } from '@/app/actions/quizActions';
 
 export const runtime = 'edge';
+export const contentType = 'image/png';
+export const size = { width: 1200, height: 630 };
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export default async function Image({ params }: { params: { id: string } }) {
   const quiz = await getQuizById(params.id);
 
   if (!quiz) {
@@ -25,7 +24,8 @@ export async function GET(
         >
           Quiz Results Not Found
         </div>
-      )
+      ),
+      { width: 1200, height: 630 }
     );
   }
 
@@ -61,9 +61,6 @@ export async function GET(
         </div>
       </div>
     ),
-    {
-      width: 1200,
-      height: 630,
-    }
+    { width: 1200, height: 630 }
   );
 }
