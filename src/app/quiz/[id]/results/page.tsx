@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import AuthForm from '@/app/components/AuthForm';
 import { signIn } from '@/app/store/authSlice';
+import DynamicMetaTags from '@/app/components/DynamicMetaTags';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
@@ -17,12 +18,40 @@ export default function QuizResults() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [quiz, setQuiz] = useState<{
+    id: number;
+    name: string;
+    description: string;
+    image?: string;
+  } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const score = Number(searchParams.get('score'));
   const total = Number(searchParams.get('total'));
   // Default to a green theme if no valid theme color is provided
   const theme = searchParams.get('theme') || '#388E3C';
   const percentage = Math.round((score / total) * 100);
+
+  // Fetch quiz data
+  useEffect(() => {
+    const fetchQuiz = async () => {
+      try {
+        const quizId = window.location.pathname.split('/')[2];
+        const response = await fetch(`${API_BASE_URL}/quizzes/${quizId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch quiz');
+        }
+        const data = await response.json();
+        setQuiz(data);
+      } catch (error) {
+        console.error('Error fetching quiz:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuiz();
+  }, []);
 
   // Validate if the theme is a proper hex color, otherwise use default green
   // Get theme-specific styling classes
@@ -295,76 +324,102 @@ export default function QuizResults() {
   );
 
   return (
-    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        {/* Results Content */}
-        <div className={`${!isAuthenticated ? 'blur-sm' : ''}`}>
-          <ResultsContent />
-        </div>
-      </div>
-
-      {/* Auth Modal */}
-      {!isAuthenticated && (
-        <div className="fixed top-16 left-0 right-0 bottom-0 bg-white/80 backdrop-blur-sm flex items-center justify-center p-4 z-40">
-          <div className="bg-white rounded-2xl shadow-md max-w-md w-full p-8 relative border-2" style={{ borderColor: validThemeColor }}>
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
-                 style={{ background: `linear-gradient(to bottom right, ${validThemeColor}, ${validThemeColor}99)` }}>
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
-                {authMode === 'signin' ? 'Sign in to see your results' : 'Create an account to see your results'}
-              </h2>
-              <p className="text-gray-600">
-                {authMode === 'signin'
-                  ? 'Sign in to view and save your quiz results'
-                  : 'Create an account to view and save your quiz results'}
-              </p>
-            </div>
-
-            <AuthForm
-              mode={authMode}
-              onSubmit={handleAuthSuccess}
-              submitButtonText={authMode === 'signin' ? 'Sign In' : 'Create Account'}
-              error={error}
-            />
-
-            <div className="mt-6 text-center">
-              <p className="text-gray-600">
-                {authMode === 'signin' ? (
-                  <>
-                    Don&apos;t have an account?{' '}
-                    <button
-                      onClick={() => setAuthMode('signup')}
-                      className="font-medium transition-colors"
-                      style={{ color: validThemeColor }}
-                      onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
-                      onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
-                    >
-                      Create one here
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    Already have an account?{' '}
-                    <button
-                      onClick={() => setAuthMode('signin')}
-                      className="font-medium transition-colors"
-                      style={{ color: validThemeColor }}
-                      onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
-                      onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
-                    >
-                      Sign in here
-                    </button>
-                  </>
-                )}
-              </p>
+    <>
+      {quiz ? (
+        <DynamicMetaTags
+          title={`Results: ${quiz.name} - Veggie Quiz`}
+          description={`You scored ${score}/${total} (${percentage}%)! See how well you did on the ${quiz.name} quiz! ${quiz.description}`}
+          ogTitle={`Results: ${quiz.name} - Veggie Quiz`}
+          ogDescription={`You scored ${score}/${total} (${percentage}%)! See how well you did on the ${quiz.name} quiz! ${quiz.description}`}
+          ogImage={quiz.image}
+          twitterTitle={`Results: ${quiz.name} - Veggie Quiz`}
+          twitterDescription={`You scored ${score}/${total} (${percentage}%)! See how well you did on the ${quiz.name} quiz! ${quiz.description}`}
+          twitterImage={quiz.image}
+        />
+      ) : (
+        <DynamicMetaTags
+          title={isLoading ? "Loading Results - Veggie Quiz" : "Quiz Results - Veggie Quiz"}
+          description={isLoading ? "Loading your quiz results..." : "View your quiz results!"}
+        />
+      )}
+      <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+        {isLoading && !quiz ? (
+          <div className="flex items-center justify-center h-48">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+            <p className="ml-3 text-gray-600">Loading results...</p>
+          </div>
+        ) : (
+          <div className="max-w-3xl mx-auto">
+            {/* Results Content */}
+            <div className={`${!isAuthenticated ? 'blur-sm' : ''}`}>
+              <ResultsContent />
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+
+        {/* Auth Modal */}
+        {!isAuthenticated && (
+          <div className="fixed top-16 left-0 right-0 bottom-0 bg-white/80 backdrop-blur-sm flex items-center justify-center p-4 z-40">
+            <div className="bg-white rounded-2xl shadow-md max-w-md w-full p-8 relative border-2" style={{ borderColor: validThemeColor }}>
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
+                   style={{ background: `linear-gradient(to bottom right, ${validThemeColor}, ${validThemeColor}99)` }}>
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
+                  {authMode === 'signin' ? 'Sign in to see your results' : 'Create an account to see your results'}
+                </h2>
+                <p className="text-gray-600">
+                  {authMode === 'signin'
+                    ? 'Sign in to view and save your quiz results'
+                    : 'Create an account to view and save your quiz results'}
+                </p>
+              </div>
+
+              <AuthForm
+                mode={authMode}
+                onSubmit={handleAuthSuccess}
+                submitButtonText={authMode === 'signin' ? 'Sign In' : 'Create Account'}
+                error={error}
+              />
+
+              <div className="mt-6 text-center">
+                <p className="text-gray-600">
+                  {authMode === 'signin' ? (
+                    <>
+                      Don&apos;t have an account?{' '}
+                      <button
+                        onClick={() => setAuthMode('signup')}
+                        className="font-medium transition-colors"
+                        style={{ color: validThemeColor }}
+                        onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                        onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
+                      >
+                        Create one here
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      Already have an account?{' '}
+                      <button
+                        onClick={() => setAuthMode('signin')}
+                        className="font-medium transition-colors"
+                        style={{ color: validThemeColor }}
+                        onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                        onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
+                      >
+                        Sign in here
+                      </button>
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
