@@ -57,6 +57,9 @@ export default function RootLayout({
         <meta name="keywords" content="veggie quiz, plant-based nutrition, healthy eating, nutrition education, vegetable facts, fruit facts, herbs, legumes, health quiz, nutrition quiz, healthy living" />
         <meta name="author" content="Veggie Quiz" />
         <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+        <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+        <meta name="revisit-after" content="7 days" />
         <meta name="language" content="English" />
 
         {/* Open Graph / Facebook */}
