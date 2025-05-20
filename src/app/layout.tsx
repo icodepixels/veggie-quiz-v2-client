@@ -50,6 +50,37 @@ export default function RootLayout({
       <head>
         <meta name="google" content="notranslate" />
         <meta httpEquiv="Content-Language" content="en" />
+
+        {/* Primary Meta Tags */}
+        <meta name="title" content="Veggie Quiz - Fun Plant-Based Nutrition Learning" />
+        <meta name="description" content="Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health." />
+        <meta name="keywords" content="veggie quiz, plant-based nutrition, healthy eating, nutrition education, vegetable facts, fruit facts, herbs, legumes, health quiz, nutrition quiz, healthy living" />
+        <meta name="author" content="Veggie Quiz" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="English" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://veggiequiz.com/" />
+        <meta property="og:title" content="Veggie Quiz - Fun Plant-Based Nutrition Learning" />
+        <meta property="og:description" content="Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health." />
+        <meta property="og:image" content="/logo-v4.png" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://veggiequiz.com/" />
+        <meta property="twitter:title" content="Veggie Quiz - Fun Plant-Based Nutrition Learning" />
+        <meta property="twitter:description" content="Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health." />
+        <meta property="twitter:image" content="//logo-v4.png" />
+
+        {/* Favicon */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#388E3C" />
+        <meta name="msapplication-TileColor" content="#388E3C" />
+        <meta name="theme-color" content="#388E3C" />
       </head>
       <body className={nunito.className}>
         <Providers>
