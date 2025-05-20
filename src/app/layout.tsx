@@ -51,6 +51,10 @@ export default function RootLayout({
         <meta name="google" content="notranslate" />
         <meta httpEquiv="Content-Language" content="en" />
 
+        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+        <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large" />
+        <meta name="revisit-after" content="7 days" />
+
         {/* Primary Meta Tags */}
         <meta name="title" content="Veggie Quiz - Fun Plant-Based Nutrition Learning" />
         <meta name="description" content="Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health." />
