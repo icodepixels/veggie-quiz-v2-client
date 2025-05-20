@@ -33,7 +33,7 @@ const fredoka = Fredoka({
 
 export const metadata: Metadata = {
   title: "Veggie Quiz",
-  description: "Test your knowledge about vegetables!",
+  description: "Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health.",
   other: {
     'google': 'notranslate',
     'content-language': 'en',
