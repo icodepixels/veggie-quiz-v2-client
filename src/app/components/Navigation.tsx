@@ -63,7 +63,7 @@ export default function Navigation() {
             </Link>
 
             {/* Mission statement */}
-            <div className="mt-2 md:mt-0 md:mx-4 text-sm max-w-lg bg-gradient-to-r from-green-50 to-amber-50 p-3 rounded-lg border border-green-100">
+            <div className="mb-2 md:mt-0 md:mx-4 text-sm max-w-lg bg-gradient-to-r from-green-50 to-amber-50 p-3 rounded-lg border border-green-100">
               <div>
                 <p className="text-gray-700 leading-snug">
                   <span className="font-semibold text-green-700">Unlock the science of plant-based nutrition</span> through our fun, bite-sized quizzes. Discover how <span className="italic">fruits</span>, <span className="italic">veggies</span>, <span className="italic">herbs</span>, and <span className="italic">legumes</span> fuel your body and protect your health!
