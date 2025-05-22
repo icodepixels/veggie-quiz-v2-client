@@ -74,7 +74,7 @@ export default function QuizResults() {
 
     // Green colors (#388E3C, #66BB6A, #43A047)
     if (decodedColor.match(/#(388E3C|66BB6A|43A047)/i)) {
-      return {
+        return {
         border: 'border-green-600',
         text: 'text-green-700',
         bg: 'bg-green-600',
@@ -89,7 +89,7 @@ export default function QuizResults() {
 
     // Orange/brown colors (#FF8A30, #F57C00, #3E2C1A)
     if (decodedColor.match(/#(FF8A30|F57C00|3E2C1A)/i)) {
-      return {
+        return {
         border: 'border-amber-500',
         text: 'text-amber-700',
         bg: 'bg-amber-500',
@@ -104,7 +104,7 @@ export default function QuizResults() {
 
     // Light yellow (#FBE9A7)
     if (decodedColor.match(/#FBE9A7/i)) {
-      return {
+        return {
         border: 'border-yellow-300',
         text: 'text-yellow-800',
         bg: 'bg-yellow-400',
@@ -295,15 +295,15 @@ export default function QuizResults() {
 
         {/* Action Buttons */}
         <div className="space-y-4">
-                      <button
-              onClick={() => router.push('/')}
+          <button
+            onClick={() => router.push('/')}
               className="w-full text-white py-3 px-4 rounded-xl transition-colors flex items-center justify-center shadow-sm"
                             style={{
                 backgroundColor: validThemeColor
               }}
               onMouseOver={(e) => e.currentTarget.style.filter = 'brightness(90%)'}
               onMouseOut={(e) => e.currentTarget.style.filter = 'brightness(100%)'}
-            >
+          >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
@@ -342,84 +342,84 @@ export default function QuizResults() {
           description={isLoading ? "Loading your quiz results..." : "View your quiz results!"}
         />
       )}
-      <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
         {isLoading && !quiz ? (
           <div className="flex items-center justify-center h-48">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
             <p className="ml-3 text-gray-600">Loading results...</p>
           </div>
         ) : (
-          <div className="max-w-3xl mx-auto">
-            {/* Results Content */}
-            <div className={`${!isAuthenticated ? 'blur-sm' : ''}`}>
-              <ResultsContent />
-            </div>
-          </div>
+      <div className="max-w-3xl mx-auto">
+        {/* Results Content */}
+        <div className={`${!isAuthenticated ? 'blur-sm' : ''}`}>
+          <ResultsContent />
+        </div>
+      </div>
         )}
 
-        {/* Auth Modal */}
-        {!isAuthenticated && (
-          <div className="fixed top-16 left-0 right-0 bottom-0 bg-white/80 backdrop-blur-sm flex items-center justify-center p-4 z-40">
+      {/* Auth Modal */}
+      {!isAuthenticated && (
+        <div className="fixed top-16 left-0 right-0 bottom-0 bg-white/80 backdrop-blur-sm flex items-center justify-center p-4 z-40">
             <div className="bg-white rounded-2xl shadow-md max-w-md w-full p-8 relative border-2" style={{ borderColor: validThemeColor }}>
-              <div className="text-center mb-8">
+            <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                    style={{ background: `linear-gradient(to bottom right, ${validThemeColor}, ${validThemeColor}99)` }}>
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
-                  {authMode === 'signin' ? 'Sign in to see your results' : 'Create an account to see your results'}
-                </h2>
-                <p className="text-gray-600">
-                  {authMode === 'signin'
-                    ? 'Sign in to view and save your quiz results'
-                    : 'Create an account to view and save your quiz results'}
-                </p>
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
               </div>
+              <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
+                {authMode === 'signin' ? 'Sign in to see your results' : 'Create an account to see your results'}
+              </h2>
+              <p className="text-gray-600">
+                {authMode === 'signin'
+                  ? 'Sign in to view and save your quiz results'
+                  : 'Create an account to view and save your quiz results'}
+              </p>
+            </div>
 
-              <AuthForm
-                mode={authMode}
-                onSubmit={handleAuthSuccess}
-                submitButtonText={authMode === 'signin' ? 'Sign In' : 'Create Account'}
-                error={error}
-              />
+            <AuthForm
+              mode={authMode}
+              onSubmit={handleAuthSuccess}
+              submitButtonText={authMode === 'signin' ? 'Sign In' : 'Create Account'}
+              error={error}
+            />
 
-              <div className="mt-6 text-center">
-                <p className="text-gray-600">
-                  {authMode === 'signin' ? (
-                    <>
-                      Don&apos;t have an account?{' '}
-                      <button
-                        onClick={() => setAuthMode('signup')}
+            <div className="mt-6 text-center">
+              <p className="text-gray-600">
+                {authMode === 'signin' ? (
+                  <>
+                    Don&apos;t have an account?{' '}
+                    <button
+                      onClick={() => setAuthMode('signup')}
                         className="font-medium transition-colors"
                         style={{ color: validThemeColor }}
                         onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
                         onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
-                      >
-                        Create one here
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      Already have an account?{' '}
-                      <button
-                        onClick={() => setAuthMode('signin')}
+                    >
+                      Create one here
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Already have an account?{' '}
+                    <button
+                      onClick={() => setAuthMode('signin')}
                         className="font-medium transition-colors"
                         style={{ color: validThemeColor }}
                         onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
                         onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
-                      >
-                        Sign in here
-                      </button>
-                    </>
-                  )}
-                </p>
-              </div>
+                    >
+                      Sign in here
+                    </button>
+                  </>
+                )}
+              </p>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
     </>
   );
 }

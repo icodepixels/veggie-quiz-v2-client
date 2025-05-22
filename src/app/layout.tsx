@@ -5,6 +5,7 @@ import Navigation from "./components/Navigation";
 import { Providers } from '@/app/providers';
 import AuthInitializer from './components/AuthInitializer';
 import { Nunito, Fredoka } from 'next/font/google';
+import Script from 'next/script';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -88,6 +89,21 @@ export default function RootLayout({
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#388E3C" />
         <meta name="msapplication-TileColor" content="#388E3C" />
         <meta name="theme-color" content="#388E3C" />
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-356085313"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-356085313', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
       </head>
       <body className={nunito.className}>
         <Providers>
