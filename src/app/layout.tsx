@@ -91,7 +91,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#388E3C" />
         {/* Google Analytics */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-490286683"
+          src="https://www.googletagmanager.com/gtag/js?id=G-1G7YWC1HSM"
           strategy="afterInteractive"
         />
         <Script id="gtag-init" strategy="afterInteractive">
@@ -99,7 +99,7 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-490286683', {
+            gtag('config', 'G-1G7YWC1HSM', {
               page_path: window.location.pathname,
             });
           `}
