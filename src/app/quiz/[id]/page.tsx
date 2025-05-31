@@ -1,11 +1,10 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
-import QuizPageClient from './QuizPageClient';
+import { Suspense } from 'react';
+import QuizPageContent from './QuizPageContent';
 
 export default function QuizPage() {
-  const pathname = usePathname();
-  const quizId = pathname.split('/').pop() || '';
-  console.log("current route:", quizId);
-  return <QuizPageClient quizId={quizId} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <QuizPageContent />
+    </Suspense>
+  );
 }
