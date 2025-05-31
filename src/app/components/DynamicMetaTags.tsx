@@ -45,6 +45,13 @@ export default function DynamicMetaTags({
       }
     };
 
+    // Helper function to ensure absolute URL
+    const ensureAbsoluteUrl = (url: string) => {
+      if (!url) return url;
+      if (url.startsWith('http')) return url;
+      return `https://www.veggiequiz.com${url.startsWith('/') ? url : `/${url}`}`;
+    };
+
     // Update document title
     if (title) {
       document.title = title;
@@ -56,12 +63,12 @@ export default function DynamicMetaTags({
     // Update OpenGraph tags
     updateMetaTag('og:title', ogTitle, true);
     updateMetaTag('og:description', ogDescription, true);
-    updateMetaTag('og:image', `https://www.veggiequiz.com/${ogImage}`, true);
+    updateMetaTag('og:image', ogImage ? ensureAbsoluteUrl(ogImage) : undefined, true);
 
     // Update Twitter tags
     updateMetaTag('twitter:title', twitterTitle, true);
     updateMetaTag('twitter:description', twitterDescription, true);
-    updateMetaTag('twitter:image', `https://www.veggiequiz.com/${twitterImage}`, true);
+    updateMetaTag('twitter:image', twitterImage ? ensureAbsoluteUrl(twitterImage) : undefined, true);
 
   }, [title, description, ogTitle, ogDescription, ogImage, twitterTitle, twitterDescription, twitterImage]);
 

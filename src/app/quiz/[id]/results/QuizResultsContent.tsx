@@ -313,15 +313,21 @@ export default function QuizResultsContent() {
           description={`You scored ${score}/${total} (${percentage}%)! See how well you did on the ${quiz.name} quiz! ${quiz.description}`}
           ogTitle={`Results: ${quiz.name} - Veggie Quiz`}
           ogDescription={`You scored ${score}/${total} (${percentage}%)! See how well you did on the ${quiz.name} quiz! ${quiz.description}`}
-          ogImage={quiz.image}
+          ogImage={quiz.image || '/logo-v4.png'}
           twitterTitle={`Results: ${quiz.name} - Veggie Quiz`}
           twitterDescription={`You scored ${score}/${total} (${percentage}%)! See how well you did on the ${quiz.name} quiz! ${quiz.description}`}
-          twitterImage={quiz.image}
+          twitterImage={quiz.image || '/logo-v4.png'}
         />
       ) : (
         <DynamicMetaTags
           title={isLoading ? "Loading Results - Veggie Quiz" : "Quiz Results - Veggie Quiz"}
           description={isLoading ? "Loading your quiz results..." : "View your quiz results!"}
+          ogTitle={isLoading ? "Loading Results - Veggie Quiz" : "Quiz Results - Veggie Quiz"}
+          ogDescription={isLoading ? "Loading your quiz results..." : "View your quiz results!"}
+          ogImage="/logo-v4.png"
+          twitterTitle={isLoading ? "Loading Results - Veggie Quiz" : "Quiz Results - Veggie Quiz"}
+          twitterDescription={isLoading ? "Loading your quiz results..." : "View your quiz results!"}
+          twitterImage="/logo-v4.png"
         />
       )}
       <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
