@@ -1,12 +1,10 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import QuizPageWrapper from './QuizPageWrapper';
+import QuizPageClient from './QuizPageClient';
 
 export default function QuizPage() {
   const pathname = usePathname();
-  const quizId = pathname.replace('/quiz/', '');
-  console.log("quizId", quizId);
-
-  return <QuizPageWrapper params={{ id: quizId }} />;
+  const quizId = pathname.split('/').pop() || '46';
+  return <QuizPageClient quizId={quizId} />;
 }

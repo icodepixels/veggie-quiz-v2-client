@@ -30,8 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
     if (!quizId) {
       return {
-        title: 'Quiz Not Found - Veggie Quiz',
-        description: 'The requested quiz could not be found.',
+        title: 'Veggie Quiz',
+        description: 'Test your knowledge about vegetables!',
       };
     }
 
@@ -43,8 +43,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
     if (!response.ok) {
       return {
-        title: 'Quiz Not Found - Veggie Quiz',
-        description: 'The requested quiz could not be found.',
+        title: 'Veggie Quiz',
+        description: 'Test your knowledge about vegetables!',
       };
     }
 
@@ -67,8 +67,8 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   } catch {
     return {
-      title: 'Quiz Not Found - Veggie Quiz',
-      description: 'The requested quiz could not be found.',
+      title: 'Veggie Quiz',
+      description: 'Test your knowledge about vegetables!',
     };
   }
 }
