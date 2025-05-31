@@ -24,6 +24,7 @@ const getGradientStyle = (theme: string) => {
 export default function QuizPageClient({ quizId }: QuizPageClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  console.log("searchParams", searchParams);
   const theme = searchParams.get('theme') || '#388E3C';
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
