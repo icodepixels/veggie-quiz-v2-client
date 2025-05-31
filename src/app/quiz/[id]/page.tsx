@@ -5,6 +5,6 @@ import QuizPageClient from './QuizPageClient';
 
 export default function QuizPage() {
   const pathname = usePathname();
-  const quizId = pathname.split('/').pop() || '46';
+  const quizId = pathname.split('/').pop();
   return <QuizPageClient quizId={quizId} />;
 }

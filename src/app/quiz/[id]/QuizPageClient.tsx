@@ -101,27 +101,28 @@ export default function QuizPageClient({ quizId }: QuizPageClientProps) {
   }, [dispatch, quizId]);
 
   const handleAnswerSelect = (answerIndex: number) => {
-    if (selectedAnswer !== null) return;
+    if (selectedAnswer !== null || !quiz?.questions) return;
     setSelectedAnswer(answerIndex);
     setShowExplanation(true);
 
-    if (answerIndex === quiz?.questions[currentQuestionIndex].correct_answer_index) {
+    if (answerIndex === quiz.questions[currentQuestionIndex].correct_answer_index) {
       setScore(prev => prev + 1);
     }
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < (quiz?.questions.length ?? 0) - 1) {
+    if (!quiz?.questions) return;
+    if (currentQuestionIndex < quiz.questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setShowExplanation(false);
     } else {
-      const totalQuestions = quiz?.questions.length ?? 0;
-      router.push(`/quiz/${quiz?.id}/results?score=${score}&total=${totalQuestions}&theme=${theme}`);
+      const totalQuestions = quiz.questions.length;
+      router.push(`/quiz/${quiz.id}/results?score=${score}&total=${totalQuestions}&theme=${theme}`);
     }
   };
 
-  if (loading) {
+  if (loading || !quiz?.questions) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
         <div className="text-center">
