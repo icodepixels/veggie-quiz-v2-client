@@ -4,7 +4,7 @@ import QuizPageClient from './QuizPageClient';
 // Server component for metadata
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   try {
-    const quizId = params.id;
+    const quizId = await Promise.resolve(params.id);
     if (!quizId) {
       return {
         title: 'Quiz Not Found - Veggie Quiz',
