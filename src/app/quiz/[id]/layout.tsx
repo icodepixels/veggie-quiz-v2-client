@@ -96,6 +96,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function QuizLayout({ children }: Props) {
+type LayoutProps = {
+  children: React.ReactNode;
+  params: { id: string };
+}
+
+export default function QuizLayout({ children }: LayoutProps) {
   return children;
 }
