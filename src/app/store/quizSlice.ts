@@ -25,11 +25,32 @@ interface Quiz {
 
 interface QuizState {
   quizzesByCategory: { [key: string]: Quiz[] };
+  currentQuiz: Quiz | null;
   loading: boolean;
   error: string | null;
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000';
+
+export const fetchQuizById = createAsyncThunk(
+  'quiz/fetchQuizById',
+  async (quizId: string) => {
+    const response = await fetch(`${API_BASE_URL}/quizzes/${quizId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+      mode: 'cors',
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data as Quiz;
+  }
+);
 
 export const fetchQuizzes = createAsyncThunk(
   'quiz/fetchQuizzes',
@@ -57,6 +78,7 @@ export const fetchQuizzes = createAsyncThunk(
 
 const initialState: QuizState = {
   quizzesByCategory: {},
+  currentQuiz: null,
   loading: false,
   error: null,
 };
@@ -64,9 +86,27 @@ const initialState: QuizState = {
 const quizSlice = createSlice({
   name: 'quiz',
   initialState,
-  reducers: {},
+  reducers: {
+    clearCurrentQuiz: (state) => {
+      state.currentQuiz = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
+      // Handle fetchQuizById
+      .addCase(fetchQuizById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchQuizById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentQuiz = action.payload;
+      })
+      .addCase(fetchQuizById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'An error occurred';
+      })
+      // Handle fetchQuizzes
       .addCase(fetchQuizzes.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -91,4 +131,5 @@ const quizSlice = createSlice({
   },
 });
 
+export const { clearCurrentQuiz } = quizSlice.actions;
 export const quizReducer = quizSlice.reducer;

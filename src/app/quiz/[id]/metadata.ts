@@ -11,6 +11,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // Get quiz data
   const quiz = await getQuizById(params.id);
+  console.log("params", params);
+
 
   if (!quiz) {
     return {

@@ -2,8 +2,12 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
+import { fetchQuizById, clearCurrentQuiz } from '@/app/store/quizSlice';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+interface QuizPageClientProps {
+  quizId: string;
+}
 
 // Custom CSS for theme-specific gradient animation and card shadow
 const getGradientStyle = (theme: string) => {
@@ -17,39 +21,18 @@ const getGradientStyle = (theme: string) => {
   };
 };
 
-interface Question {
-  id: number;
-  question_text: string;
-  choices: string[];
-  correct_answer_index: number;
-  explanation: string;
-  image?: string;
-}
-
-interface Quiz {
-  id: number;
-  name: string;
-  description: string;
-  image?: string;
-  questions: Question[];
-}
-
-interface QuizPageClientProps {
-  quizId: string;
-}
-
 export default function QuizPageClient({ quizId }: QuizPageClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const theme = searchParams.get('theme') || '#388E3C';
-  const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [score, setScore] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const hasFetchedRef = useRef(false);
+
+  const dispatch = useAppDispatch();
+  const { currentQuiz: quiz, loading, error } = useAppSelector((state) => state.quiz);
 
   const getThemeClasses = (themeColor: string) => {
     const decodedColor = decodeURIComponent(themeColor);
@@ -107,31 +90,15 @@ export default function QuizPageClient({ quizId }: QuizPageClientProps) {
   const gradientStyle = getGradientStyle(theme);
 
   useEffect(() => {
-    const fetchQuiz = async () => {
-      if (hasFetchedRef.current) return;
-      hasFetchedRef.current = true;
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
 
-      try {
-        if (!quizId) {
-          throw new Error('Quiz ID is required');
-        }
+    dispatch(fetchQuizById(quizId));
 
-        const response = await fetch(`${API_BASE_URL}/quizzes/${quizId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch quiz');
-        }
-        const data = await response.json();
-        setQuiz(data);
-      } catch (error) {
-        console.error('Error fetching quiz:', error);
-        setError(error instanceof Error ? error.message : 'Failed to fetch quiz');
-      } finally {
-        setIsLoading(false);
-      }
+    return () => {
+      dispatch(clearCurrentQuiz());
     };
-
-    fetchQuiz();
-  }, [quizId]);
+  }, [dispatch, quizId]);
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null) return;
@@ -154,7 +121,7 @@ export default function QuizPageClient({ quizId }: QuizPageClientProps) {
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
         <div className="text-center">
