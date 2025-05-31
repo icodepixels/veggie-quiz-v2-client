@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!response.ok) {
       return {
-        title: 'Veggie Quiz',
-        description: 'Test your knowledge about vegetables!',
+        title: 'Quiz Not Found - Veggie Quiz',
+        description: 'The requested quiz could not be found.',
       };
     }
 
@@ -90,17 +90,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   } catch {
     return {
-      title: 'Veggie Quiz',
-      description: 'Test your knowledge about vegetables!',
+      title: 'Quiz Not Found - Veggie Quiz',
+      description: 'The requested quiz could not be found.',
     };
   }
 }
 
-type LayoutProps = {
-  children: React.ReactNode;
-  params: { id: string };
-}
-
-export default function QuizLayout({ children }: LayoutProps) {
+export default function QuizLayout({ children }: Props) {
   return children;
 }
