@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home Page -->
+  <url>
+    <loc>https://veggiequiz.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Authentication Pages -->
+  <url>
+    <loc>https://veggiequiz.com/signin</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://veggiequiz.com/signup</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Profile Page -->
+  <url>
+    <loc>https://veggiequiz.com/profile</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Category Pages -->
+  <url>
+    <loc>https://veggiequiz.com/category/vegetables</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://veggiequiz.com/category/fruits</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://veggiequiz.com/category/herbs</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Quiz Pages -->
+  <url>
+    <loc>https://veggiequiz.com/quiz/vegetable-identification</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://veggiequiz.com/quiz/fruit-identification</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://veggiequiz.com/quiz/herb-identification</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>
