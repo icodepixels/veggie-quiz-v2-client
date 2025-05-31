@@ -56,12 +56,12 @@ export default function DynamicMetaTags({
     // Update OpenGraph tags
     updateMetaTag('og:title', ogTitle, true);
     updateMetaTag('og:description', ogDescription, true);
-    updateMetaTag('og:image', ogImage, true);
+    updateMetaTag('og:image', `https://www.veggiequiz.com/${ogImage}`, true);
 
     // Update Twitter tags
     updateMetaTag('twitter:title', twitterTitle, true);
     updateMetaTag('twitter:description', twitterDescription, true);
-    updateMetaTag('twitter:image', twitterImage, true);
+    updateMetaTag('twitter:image', `https://www.veggiequiz.com/${twitterImage}`, true);
 
   }, [title, description, ogTitle, ogDescription, ogImage, twitterTitle, twitterDescription, twitterImage]);
 
