@@ -1,4 +1,5 @@
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
+import QuizHeader from '@/app/components/QuizHeader';
 
 type Props = {
   children: React.ReactNode;
@@ -20,6 +21,39 @@ export async function generateStaticParams() {
   return quizzes.map((quiz: { id: number }) => ({
     id: quiz.id.toString(),
   }));
+}
+
+export async function generateViewport({ params }: Props): Promise<Viewport> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+    const response = await fetch(`${baseUrl}/quizzes/${params.id}`, {
+      cache: 'no-store',
+      next: { revalidate: 0 }
+    });
+
+    if (!response.ok) {
+      return {
+        themeColor: '#388E3C',
+        width: 'device-width',
+        initialScale: 1,
+      };
+    }
+
+    const quiz = await response.json();
+    const themeColor = quiz.theme_color || '#388E3C';
+
+    return {
+      themeColor,
+      width: 'device-width',
+      initialScale: 1,
+    };
+  } catch {
+    return {
+      themeColor: '#388E3C',
+      width: 'device-width',
+      initialScale: 1,
+    };
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -96,6 +130,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function QuizLayout({ children }: Props) {
-  return children;
+export default async function QuizLayout({ children, params }: Props) {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+  const response = await fetch(`${baseUrl}/quizzes/${params.id}`, {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  });
+
+  if (!response.ok) {
+    return children;
+  }
+
+  const quiz = await response.json();
+
+  return (
+    <>
+      <QuizHeader quiz={quiz} />
+      {children}
+    </>
+  );
 }

@@ -1,10 +1,38 @@
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import { getQuizById } from '@/app/actions/quizActions';
 
 type Props = {
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
+
+export async function generateViewport({ params }: Props): Promise<Viewport> {
+  try {
+    const quiz = await getQuizById(params.id);
+
+    if (!quiz) {
+      return {
+        themeColor: '#388E3C',
+        width: 'device-width',
+        initialScale: 1,
+      };
+    }
+
+    const themeColor = quiz.theme_color || '#388E3C';
+
+    return {
+      themeColor,
+      width: 'device-width',
+      initialScale: 1,
+    };
+  } catch {
+    return {
+      themeColor: '#388E3C',
+      width: 'device-width',
+      initialScale: 1,
+    };
+  }
+}
 
 export async function generateMetadata(
   { params, searchParams }: Props

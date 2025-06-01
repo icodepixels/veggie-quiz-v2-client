@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navigation from "./components/Navigation";
 import { Providers } from '@/app/providers';
 import AuthInitializer from './components/AuthInitializer';
 import { Nunito, Fredoka } from 'next/font/google';
 import Script from 'next/script';
+import DefaultLayout from './components/DefaultLayout';
+import { headers } from 'next/headers';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,8 +35,8 @@ const fredoka = Fredoka({
 
 export const metadata: Metadata = {
   title: "Veggie Quiz",
-  description: "Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health.",
-  keywords: ["veggie quiz", "plant-based nutrition", "healthy eating", "nutrition education", "vegetable facts", "fruit facts", "herbs", "legumes", "health quiz", "nutrition quiz", "healthy living"],
+  description: "Test your knowledge of plant-based nutrition with our fun, bite-sized quizzes!",
+  keywords: ["veggie quiz", "plant-based nutrition", "vegetable facts", "nutrition education"],
   authors: [{ name: "Veggie Quiz" }],
   robots: {
     index: true,
@@ -48,31 +49,27 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    type: 'website',
-    url: 'https://veggiequiz.com/',
-    title: 'Veggie Quiz - Fun Plant-Based Nutrition Learning',
-    description: 'Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health.',
-    siteName: 'Veggie Quiz',
+    title: "Veggie Quiz",
+    description: "Test your knowledge of plant-based nutrition with our fun, bite-sized quizzes!",
+    url: process.env.NEXT_PUBLIC_BASE_URL || 'https://veggiequiz.com',
+    siteName: "Veggie Quiz",
+    locale: "en_US",
+    type: "website",
     images: [
       {
-        url: '/logo-v4.png',
+        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://veggiequiz.com'}/logo-v4.png`,
         width: 1200,
         height: 630,
-        alt: 'Veggie Quiz Logo',
+        alt: "Veggie Quiz Logo",
       }
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Veggie Quiz - Fun Plant-Based Nutrition Learning',
-    description: 'Discover the science of plant-based nutrition through fun, bite-sized quizzes. Learn how fruits, veggies, herbs, and legumes fuel your body and protect your health.',
-    images: ['/logo-v4.png'],
-    creator: '@veggiequiz',
-  },
-  other: {
-    'google': 'notranslate',
-    'content-language': 'en',
-    'revisit-after': '7 days',
+    card: "summary_large_image",
+    title: "Veggie Quiz",
+    description: "Test your knowledge of plant-based nutrition with our fun, bite-sized quizzes!",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL || 'https://veggiequiz.com'}/logo-v4.png`],
+    creator: "@veggiequiz",
   },
   icons: {
     icon: [
@@ -98,18 +95,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const isQuizPage = headersList.get('x-is-quiz-page') === 'true';
+
   return (
     <html lang="en" translate="no" className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${fredoka.variable} antialiased`}>
       <body>
         <Providers>
           <AuthInitializer />
-          <Navigation />
-          {children}
+          {isQuizPage ? (
+            children
+          ) : (
+            <DefaultLayout>
+              {children}
+            </DefaultLayout>
+          )}
         </Providers>
         {/* Google Analytics */}
         <Script
