@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import QuizResultsContent from './QuizResultsContent';
+import QuizResultsContent from '@/app/quiz/[id]/results/QuizResultsContent';
 import { getQuizById } from '@/app/actions/quizActions';
 
 type Props = {
@@ -35,9 +35,9 @@ export async function generateMetadata(
     : `${process.env.NEXT_PUBLIC_BASE_URL || 'https://veggiequiz.com'}${imageUrl}`;
 
   return {
-    title: `Results: ${quiz.name} - Veggie Quiz`,
-    description: `${scoreText}See how well you did on the ${quiz.name} quiz! ${quiz.description}`,
-    keywords: [`${quiz.name} results`, 'quiz results', 'veggie quiz', 'plant-based nutrition', 'nutrition quiz results'],
+    title: `${quiz.name} - Quiz Results - Veggie Quiz`,
+    description: `${scoreText}${quiz.description}`,
+    keywords: [`${quiz.name}`, 'quiz results', 'veggie quiz', 'plant-based nutrition', 'vegetable facts', 'nutrition education'],
     authors: [{ name: 'Veggie Quiz' }],
     robots: {
       index: true,
@@ -50,8 +50,8 @@ export async function generateMetadata(
       },
     },
     openGraph: {
-      title: `Results: ${quiz.name} - Veggie Quiz`,
-      description: `${scoreText}See how well you did on the ${quiz.name} quiz! ${quiz.description}`,
+      title: `${quiz.name} - Quiz Results - Veggie Quiz`,
+      description: `${scoreText}${quiz.description}`,
       url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://veggiequiz.com'}/quiz/${params.id}/results`,
       siteName: 'Veggie Quiz',
       locale: 'en_US',
@@ -61,14 +61,14 @@ export async function generateMetadata(
           url: fullImageUrl,
           width: 1200,
           height: 630,
-          alt: `${quiz.name} Results`,
+          alt: quiz.name,
         }
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Results: ${quiz.name} - Veggie Quiz`,
-      description: `${scoreText}See how well you did on the ${quiz.name} quiz! ${quiz.description}`,
+      title: `${quiz.name} - Quiz Results - Veggie Quiz`,
+      description: `${scoreText}${quiz.description}`,
       images: [fullImageUrl],
       creator: '@veggiequiz',
     },
