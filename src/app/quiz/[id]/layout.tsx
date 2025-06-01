@@ -1,5 +1,4 @@
 import { Metadata, Viewport } from 'next';
-import QuizHeader from '@/app/components/QuizHeader';
 
 type Props = {
   children: React.ReactNode;
@@ -141,11 +140,8 @@ export default async function QuizLayout({ children, params }: Props) {
     return children;
   }
 
-  const quiz = await response.json();
-
   return (
     <>
-      <QuizHeader quiz={quiz} />
       {children}
     </>
   );

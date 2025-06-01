@@ -34,7 +34,7 @@ export async function generateMetadata(
     ? imageUrl
     : `${process.env.NEXT_PUBLIC_BASE_URL || 'https://veggiequiz.com'}${imageUrl}`;
 
-  return {
+        return {
     title: `${quiz.name} - Quiz Results - Veggie Quiz`,
     description: `${scoreText}${quiz.description}`,
     keywords: [`${quiz.name}`, 'quiz results', 'veggie quiz', 'plant-based nutrition', 'vegetable facts', 'nutrition education'],

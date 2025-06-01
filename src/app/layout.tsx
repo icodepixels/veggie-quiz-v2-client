@@ -101,7 +101,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const headersList = await headers();
-  const isQuizPage = headersList.get('x-is-quiz-page') === 'true';
+  const pathname = headersList.get('x-invoke-path') || '';
+  const isQuizPage = pathname.startsWith('/quiz/');
 
   return (
     <html lang="en" translate="no" className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${fredoka.variable} antialiased`}>
