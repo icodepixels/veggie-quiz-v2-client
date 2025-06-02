@@ -1,11 +1,11 @@
 import { Viewport } from 'next';
 
-interface Props {
+type Props = {
   children: React.ReactNode;
-  params: {
+  params: Promise<{
     id: string;
-  };
-}
+  }>;
+};
 
 async function getQuiz(id: string) {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
@@ -40,8 +40,9 @@ export async function generateStaticParams() {
 
 export async function generateViewport({ params }: Props): Promise<Viewport> {
   try {
+    const resolvedParams = await params;
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
-    const response = await fetch(`${baseUrl}/quizzes/${params.id}`, {
+    const response = await fetch(`${baseUrl}/quizzes/${resolvedParams.id}`, {
       cache: 'no-store',
       next: { revalidate: 0 }
     });
@@ -72,7 +73,8 @@ export async function generateViewport({ params }: Props): Promise<Viewport> {
 }
 
 export default async function QuizLayout({ children, params }: Props) {
-  const quiz = await getQuiz(params.id);
+  const resolvedParams = await params;
+  const quiz = await getQuiz(resolvedParams.id);
 
   if (!quiz) {
     return children;
