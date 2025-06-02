@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import AuthForm from '@/app/components/AuthForm';
-import { signIn } from '@/app/store/authSlice';
+import { signIn, signOut } from '@/app/store/authSlice';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
@@ -126,7 +126,10 @@ export default function QuizResultsContent() {
 
   useEffect(() => {
     const saveResult = async () => {
-      if (!isAuthenticated || !token) return;
+      if (!isAuthenticated || !token) {
+        console.log('Not authenticated or no token available');
+        return;
+      }
 
       setError(null);
       setMessage(null);
@@ -135,6 +138,19 @@ export default function QuizResultsContent() {
         const quizId = window.location.pathname.split('/')[2];
         if (!quizId) {
           throw new Error('Quiz ID is required');
+        }
+
+        // Validate token before making the request
+        const validateResponse = await fetch(`${API_BASE_URL}/users/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!validateResponse.ok) {
+          // Token is invalid, sign out the user
+          dispatch(signOut());
+          throw new Error('Your session has expired. Please sign in again.');
         }
 
         const response = await fetch(`${API_BASE_URL}/quiz-results`, {
@@ -158,6 +174,8 @@ export default function QuizResultsContent() {
           } else {
             throw new Error(errorData.detail || 'Failed to save result');
           }
+        } else {
+          setMessage('Results saved successfully!');
         }
       } catch (error) {
         console.error('Error saving result:', error);
@@ -166,7 +184,7 @@ export default function QuizResultsContent() {
     };
 
     saveResult();
-  }, [isAuthenticated, token, score, total, percentage]);
+  }, [isAuthenticated, token, score, total, percentage, dispatch]);
 
   const validThemeColor = theme.startsWith('#') ? theme : '#388E3C';
 
